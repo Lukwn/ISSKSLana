@@ -3,7 +3,6 @@ function erregistroaBaieztatu(){
         alert("Izena hutsik dago edo zenbaki bat du.");
         return false;
     }
-
     var nan = document.getElementById('NAN').value;
     var expresio_erregularra = /^\d{8}[a-zA-Z]$/;
     if(expresio_erregularra.test(nan)==false){
@@ -17,7 +16,7 @@ function erregistroaBaieztatu(){
     balio=balio.substring(zenb,zenb+1);
     if (balio!=letr.toUpperCase()) {
         alert("NAN-aren letra ez da zuzena.");
-        return false
+        return false;
     }
 
     if(!/^[0-9]{9}$/.test(document.getElementById('tlf').value)){

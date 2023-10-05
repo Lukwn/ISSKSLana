@@ -47,28 +47,28 @@
             <form action="index.php" class="formularioa" method="POST" onsubmit="return erregistroaBaieztatu();">
                 <h1>Register</h1>
                 <div class="input-box">
-                    <input type="text" placeholder="Izen-Abizenak" name="izab"
+                    <input type="text" placeholder="Izen-Abizenak" name="izab" id="izab"
                     required>
                     <i class='bx bx-user-circle'></i>
                 </div>
                 <div class="input-box">
-                    <input type="text" placeholder="NAN, eg: 11111111Z" name="NAN"
+                    <input type="text" placeholder="NAN, eg: 11111111Z" name="NAN" id="NAN"
                     required>
                 </div>
                 <div class="input-box">
-                    <input type="number" placeholder="Telefonoa, 9 zenbaki" name="tlf"
+                    <input type="number" placeholder="Telefonoa, 9 zenbaki" name="tlf" id="tlf"
                     required>
                 </div>
                 <div class="input-box">
-                    <input type="text" placeholder="Jaiotze data, eg: 2021-08-26" name="jd"
+                    <input type="text" placeholder="Jaiotze data, eg: 2021-08-26" name="jd" id="jd"
                     required>
                 </div>
                 <div class="input-box">
-                    <input type="text" placeholder="Mail, eg: adibidea@zerbitzaria.extentsioa" name="mail"
+                    <input type="text" placeholder="Mail, eg: adibidea@zerbitzaria.extentsioa" name="mail" id="mail"
                     required>
                 </div>
                 <div class="input-box">
-                    <input type="password" placeholder="Pasahitza" name="pass"
+                    <input type="password" placeholder="Pasahitza" name="pass" id="pass"
                     required>
                     <i class='bx bx-lock-alt' ></i>
                 </div>
