@@ -3,6 +3,7 @@ include "konexioa.php";
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    //js-a ez badu false bueltatzen hurrengo kodea egikaritzen da, non  insert-aren balioak atxitzen dira formulariotik
     $izab = $_POST['izab'];
     $nan = $_POST['NAN'];
     $tlf = $_POST['tlf'];
@@ -10,16 +11,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $mail = $_POST['mail'];
     $pass = $_POST['pass'];
 
+    //insert-a idazten dugu eta prestatzen dugu egikaritzeko
     $sql = "INSERT INTO `ERABILTZAILE` (`Izen_Abizenak`, `NAN`, `Telefonoa`, `Jaiotze_data`, `email`, `pasahitza`) VALUES (?, ?, ?, ?, ?, ?)";
-
     $stmt = mysqli_prepare($conn, $sql);
     mysqli_stmt_bind_param($stmt, "ssssss", $izab, $nan, $tlf, $jd, $mail, $pass);
+
     if (mysqli_stmt_execute($stmt)) {
         echo '<script>alert("Erabiltzaile berria sortuta!")</script>';
     } else {
         echo '<script>alert("Error: ' . mysqli_error($conn) . '")</script>';
     }
 
+    //datu basearekin konexioa ixten dugu
     mysqli_close($conn);
 }
 

@@ -1,20 +1,28 @@
 <?php
+//Sesioa hasi
 session_start();
 
+//mysqli-rekin konexioa ezarri
 include "./konexioa.php";
 include "./logout.php";
 
+//Request-a egiten den momentuan egikaritzen da
 if (isset($_REQUEST['login'])) {
+    //nan eta pass aldagaiak lortzen ditugu.
     $nan = $_REQUEST['NAN'];
     $pass = $_REQUEST['pass'];
+    //sql kontsulta gordetzen dugu aldagai batean eta gero egiten dugu mysqli_query() erabiliz
     $sql = "SELECT * FROM ERABILTZAILE WHERE NAN = '$nan'";
     $query = mysqli_query($conn, $sql);
 
     if ($query) {
+        //kontsultaren lerro emaitz kopurua kontatzen dira, 0 baino handiagoa bada erabiltzailea dagoela esan nahi du eta sesioa hasiko da.
         $num_lerro = mysqli_num_rows($query);
         if ($num_lerro > 0) {
+            //kontsultaren lerroa zutabeen emaitzak gordetzen ditugu array batean, errezago atxitzeko
             $lerroa = mysqli_fetch_assoc($query);
             if ($pass == $lerroa['pasahitza']) {
+                //sesioa hasten dugu
                 $_SESSION['NAN'] = $lerroa['nan'];
             } else {
                 echo '<script>alert("Pasahitza ez da zuzena!")</script>';
