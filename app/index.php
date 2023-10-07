@@ -11,27 +11,23 @@ if (isset($_REQUEST['login'])) {
     $query = mysqli_query($conn, $sql);
 
     if ($query) {
-        $lerroa = mysqli_fetch_assoc($query);
-        if ($lerroa) {
+        $num_lerro = mysqli_num_rows($query);
+        if ($num_lerro > 0) {
+            $lerroa = mysqli_fetch_assoc($query);
             if ($pass == $lerroa['pasahitza']) {
                 $_SESSION['NAN'] = $lerroa['nan'];
-                echo '<script>alert("Sesio hasita")</script>';
             } else {
                 echo '<script>alert("Pasahitza ez da zuzena!")</script>';
             }
+        } else {
+            echo '<script>alert("Ez dago NAN hori duen erabiltzailerik.")</script>';
         }
     } else {
-        echo '<script>alert("Ez dago NAN hori duen erabiltzailerik.")</script>';
+        echo '<script>alert("Errore bat egon da datu basea atzitzean.")</script>';
     }
 }
 echo $_SESSION['NAN'];
-
 ?>
-
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="eu">
