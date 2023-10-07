@@ -1,5 +1,5 @@
 <?php
-//Sesioa hasi
+//Saioa hasi
 session_start();
 
 //mysqli-rekin konexioa ezarri
@@ -16,14 +16,18 @@ if (isset($_REQUEST['login'])) {
     $query = mysqli_query($conn, $sql);
 
     if ($query) {
-        //kontsultaren lerro emaitz kopurua kontatzen dira, 0 baino handiagoa bada erabiltzailea dagoela esan nahi du eta sesioa hasiko da.
+        //kontsultaren lerro emaitz kopurua kontatzen dira, 0 baino handiagoa bada erabiltzailea dagoela esan nahi du eta saioa hasiko da.
         $num_lerro = mysqli_num_rows($query);
         if ($num_lerro > 0) {
             //kontsultaren lerroa zutabeen emaitzak gordetzen ditugu array batean, errezago atxitzeko
             $lerroa = mysqli_fetch_assoc($query);
             if ($pass == $lerroa['pasahitza']) {
-                //sesioa hasten dugu
-                $_SESSION['NAN'] = $lerroa['nan'];
+                //saioa sortzen dugu
+                $_SESSION['ERAB'] = array();
+                $_SESSION['ERAB']['izena'] = $lerroa['Izen_Abizenak'];
+                $_SESSION['ERAB']['NAN'] = $lerroa['NAN'];
+                header("Location:./datuakaldatu.php");
+                exit();
             } else {
                 echo '<script>alert("Pasahitza ez da zuzena!")</script>';
             }
@@ -34,7 +38,6 @@ if (isset($_REQUEST['login'])) {
         echo '<script>alert("Errore bat egon da datu basea atzitzean.")</script>';
     }
 }
-echo $_SESSION['NAN'];
 ?>
 
 <!DOCTYPE html>

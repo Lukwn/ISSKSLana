@@ -65,6 +65,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <i class='bx bx-lock-alt'></i>
             </div>
             <button type="submit" class="btn">Erregistratu</button>
+            <div class="register-link">
+                <p>Jadanik kontu bat duzu?<a href="./login.php">Saioa hasi</a></p>
+            </div>
         </form>
     </div>
 </body>
