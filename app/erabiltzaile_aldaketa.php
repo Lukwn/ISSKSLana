@@ -1,6 +1,6 @@
 <?php
 include "konexioa.php";
-
+include "logout.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //js-a ez badu false bueltatzen hurrengo kodea egikaritzen da, non  insert-aren balioak atxitzen dira formulariotik
@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
     <div class="wrapper">
-        <form action="index.php" class="formularioa" method="POST" onsubmit="return erregistroaBaieztatu();">
+        <form class="formularioa" method="POST" onsubmit="return erregistroaBaieztatu();">
             <h1>Register</h1>
             <div class="input-box">
                 <input type="text" placeholder="Izen-Abizenak" name="izab" id="izab" required>
