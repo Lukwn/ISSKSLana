@@ -8,13 +8,16 @@
 }
 
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
     background: url('./img/img.jpg') no-repeat;
     background-size: cover;
     background-position: center;
+}
+
+.gorputza {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .wrapper {

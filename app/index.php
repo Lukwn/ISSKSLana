@@ -11,20 +11,40 @@ session_destroy();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="forms.css">
+    <link rel="stylesheet" href="./barra.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
 <body>
-    <div class="wrapper">
-        <form class="formularioa">
-            <h1>Aukeratu</h1>
-            <input type="button" class="btn" onclick="window.location.href='register.php'" value="Erregistratu"></input>
-            <input type="button" class="btn" onclick="window.location.href='login.php'" value="Login"></input>
-            <input type="button" class="btn" onclick="window.location.href='datuakaldatu.php'"
-                value="Datuak aldatu"></input>
-            <input type="button" class="btn" onclick="window.location.href='barra.html'" value="Barra"></input>
-        </form>
+
+    <header class="top-bar">
+        <div class="barra">
+            <h1 class="logo">Logoa</h1>
+            <nav class="nav_barra">
+                <ul>
+                    <li class="li_barra"><a href="login.php">Log in</a></li>
+                    <li class="li_barra"><a href="register.php">Register</a></li>
+                    <li class="li_barra"><a href="datuakaldatu.php">Datuak aldatu</a></li>
+                    <li class="li_barra"><a href="#">Log out</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <div class="gorputza">
+
+        <div class="wrapper">
+            <form class="formularioa">
+                <h1>Aukeratu</h1>
+                <input type="button" class="btn" onclick="window.location.href='register.php'"
+                    value="Erregistratu"></input>
+                <input type="button" class="btn" onclick="window.location.href='login.php'" value="Login"></input>
+                <input type="button" class="btn" onclick="window.location.href='datuakaldatu.php'"
+                    value="Datuak aldatu"></input>
+                <input type="button" class="btn" onclick="window.location.href='barra.html'" value="Barra"></input>
+            </form>
+        </div>
     </div>
+
 </body>
 
 </html>

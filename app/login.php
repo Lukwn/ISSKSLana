@@ -48,26 +48,43 @@ if (isset($_REQUEST['login'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="forms.css">
+    <link rel="stylesheet" href="./barra.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
 <body>
-    <div class="wrapper">
-        <form class="formularioa" method="POST">
-            <h1>Login</h1>
-            <div class="input-box">
-                <input type="text" placeholder="Erabiltzailea(NAN)" name="NAN" id="NAN" required>
-                <i class='bx bx-user-circle'></i>
-            </div>
-            <div class="input-box">
-                <input type="password" placeholder="Pasahitza" name="pass" id="pass" required>
-                <i class='bx bx-lock-alt'></i>
-            </div>
-            <button type="submit" name="login" class="btn">Login</button>
-            <div class="register-link">
-                <p>Ez zaude erregistratuta? <a href="./register.php">Register</a></p>
-            </div>
-        </form>
+    <header class="top-bar">
+        <div class="barra">
+            <h1 class="logo">Logoa</h1>
+            <nav class="nav_barra">
+                <ul>
+                    <li class="li_barra"><a href="login.php">Log in</a></li>
+                    <li class="li_barra"><a href="register.php">Register</a></li>
+                    <li class="li_barra"><a href="datuakaldatu.php">Datuak aldatu</a></li>
+                    <li class="li_barra"><a href="#">Log out</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="gorputza">
+        <div class="wrapper">
+            <form class="formularioa" method="POST">
+                <h1>Login</h1>
+                <div class="input-box">
+                    <input type="text" placeholder="Erabiltzailea(NAN)" name="NAN" id="NAN" required>
+                    <i class='bx bx-user-circle'></i>
+                </div>
+                <div class="input-box">
+                    <input type="password" placeholder="Pasahitza" name="pass" id="pass" required>
+                    <i class='bx bx-lock-alt'></i>
+                </div>
+                <button type="submit" name="login" class="btn">Login</button>
+                <div class="register-link">
+                    <p>Ez zaude erregistratuta? <a href="./register.php">Register</a></p>
+                </div>
+            </form>
+        </div>
     </div>
 </body>
 

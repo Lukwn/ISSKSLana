@@ -35,40 +35,55 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <link rel="stylesheet" href="forms.css">
+    <link rel="stylesheet" href="./barra.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="./register.js"></script>
 </head>
 
 <body>
-    <div class="wrapper">
-        <form action="index.php" class="formularioa" method="POST" onsubmit="return erregistroaBaieztatu();">
-            <h1>Register</h1>
-            <div class="input-box">
-                <input type="text" placeholder="Izen-Abizenak" name="izab" id="izab" required>
-                <i class='bx bx-user-circle'></i>
-            </div>
-            <div class="input-box">
-                <input type="text" placeholder="NAN, eg: 11111111Z" name="NAN" id="NAN" required>
-            </div>
-            <div class="input-box">
-                <input type="number" placeholder="Telefonoa, 9 zenbaki" name="tlf" id="tlf" required>
-            </div>
-            <div class="input-box">
-                <input type="text" placeholder="Jaiotze data, eg: 2021-08-26" name="jd" id="jd" required>
-            </div>
-            <div class="input-box">
-                <input type="text" placeholder="Mail, eg: adibidea@zerbitzaria.extentsioa" name="mail" id="mail"
-                    required>
-            </div>
-            <div class="input-box">
-                <input type="password" placeholder="Pasahitza" name="pass" id="pass" required>
-                <i class='bx bx-lock-alt'></i>
-            </div>
-            <button type="submit" class="btn">Erregistratu</button>
-            <div class="register-link">
-                <p>Jadanik kontu bat duzu?<a href="./login.php">Saioa hasi</a></p>
-            </div>
-        </form>
+    <header class="top-bar">
+        <div class="barra">
+            <h1 class="logo">Logoa</h1>
+            <nav class="nav_barra">
+                <ul>
+                    <li class="li_barra"><a href="login.php">Log in</a></li>
+                    <li class="li_barra"><a href="register.php">Register</a></li>
+                    <li class="li_barra"><a href="datuakaldatu.php">Datuak aldatu</a></li>
+                    <li class="li_barra"><a href="#">Log out</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="gorputza">
+        <div class="wrapper">
+            <form action="index.php" class="formularioa" method="POST" onsubmit="return erregistroaBaieztatu();">
+                <h1>Register</h1>
+                <div class="input-box">
+                    <input type="text" placeholder="Izen-Abizenak" name="izab" id="izab" required>
+                </div>
+                <div class="input-box">
+                    <input type="text" placeholder="NAN, eg: 11111111Z" name="NAN" id="NAN" required>
+                </div>
+                <div class="input-box">
+                    <input type="number" placeholder="Telefonoa, 9 zenbaki" name="tlf" id="tlf" required>
+                </div>
+                <div class="input-box">
+                    <input type="text" placeholder="Jaiotze data, eg: 2021-08-26" name="jd" id="jd" required>
+                </div>
+                <div class="input-box">
+                    <input type="text" placeholder="Mail, eg: adibidea@zerbitzaria.extentsioa" name="mail" id="mail"
+                        required>
+                </div>
+                <div class="input-box">
+                    <input type="password" placeholder="Pasahitza" name="pass" id="pass" required>
+                </div>
+                <button type="submit" class="btn">Erregistratu</button>
+                <div class="register-link">
+                    <p>Jadanik kontu bat duzu?<a href="./login.php">Saioa hasi</a></p>
+                </div>
+            </form>
+        </div>
     </div>
 </body>
 
