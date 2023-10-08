@@ -20,6 +20,31 @@ if (isset($_SESSION['ERAB'])) {
     }
 }
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    //js-a ez badu false bueltatzen hurrengo kodea egikaritzen da, non  insert-aren balioak atxitzen dira formulariotik
+    $izab = $_POST['izab'];
+    $nan = $_POST['NAN'];
+    $tlf = $_POST['tlf'];
+    $jd = $_POST['jd'];
+    $mail = $_POST['mail'];
+    $pass = $_POST['pass'];
+
+    //update-aren eskaera idazten dugu
+    $sql = "UPDATE `ERABILTZAILE` SET `Izen_Abizenak`=?, `NAN`=?, `Telefonoa`=?, `Jaiotze_data`=?, `email`=?, `pasahitza`=? WHERE `NAN`=?";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "sssssss", $izab, $nan, $tlf, $jd, $mail, $pass, $_SESSION['ERAB']['NAN']);
+
+    if (mysqli_stmt_execute($stmt)) {
+        echo '<script>alert("Datuak eguneratu dira!")</script>';
+    } else {
+        echo '<script>alert("Error: ' . mysqli_error($conn) . '")</script>';
+    }
+
+    //datu basearekin konexioa ixten dugu
+    mysqli_close($conn);
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="eu">
@@ -30,6 +55,7 @@ if (isset($_SESSION['ERAB'])) {
     <title>Zure datuak</title>
     <link rel="stylesheet" href="datuakaldatu.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="./register.js"></script>
 </head>
 
 <body>
