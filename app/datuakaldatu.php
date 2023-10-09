@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <header class="top-bar">
         <div class="barra">
-            <h1 class="logo">Logoa</h1>
+        <a href="index.php"><img class="logo" src="./img/bag.png" alt="Logo Alt Text"></a>
             <nav class="nav_barra">
                 <ul>
                     <li class="li_barra"><a href="login.php">Log in</a></li>

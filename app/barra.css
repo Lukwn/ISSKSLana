@@ -15,8 +15,10 @@
     margin: 0 auto;
 }
 
-.top-bar .logo {
-    margin: 0;
+.top-bar .barra .logo {
+    max-width: 5%;
+    height: auto; 
+    display: block; 
 }
 
 .top-bar .nav_barra ul {
