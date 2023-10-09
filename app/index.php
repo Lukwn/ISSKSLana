@@ -25,7 +25,11 @@ session_destroy();
                     <li class="li_barra"><a href="login.php">Log in</a></li>
                     <li class="li_barra"><a href="register.php">Register</a></li>
                     <li class="li_barra"><a href="datuakaldatu.php">Datuak aldatu</a></li>
-                    <li class="li_barra"><a href="#">Log out</a></li>
+                    <li class="li_barra">
+                        <form method="POST" class="logout_botoia">
+                            <button class="btn btn-danger" name="logout">Logout</button>
+                        </form>
+                    </li>
                 </ul>
             </nav>
         </div>

@@ -11,7 +11,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 960px;
+    max-width: 90%;
     margin: 0 auto;
 }
 
@@ -28,7 +28,8 @@
 
 .top-bar .nav_barra li {
     display: inline;
-    margin-right: 20px;
+    text-overflow: ellipsis;
+    margin-right: 10px;
 }
 
 .top-bar .nav_barra li:last-child {
@@ -42,5 +43,23 @@
 .top-bar a:hover {
   color: #000;
 }
+
+.logout_botoia {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.logout_botoia button {
+    padding: 5px 10px;
+    background-color: #ff0000;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+}
+
+.logout_botoia button:hover {
+    background-color: #cc0000;
+}
+
 
 

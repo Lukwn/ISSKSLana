@@ -61,7 +61,7 @@ if (isset($_REQUEST['login'])) {
                     <li class="li_barra"><a href="login.php">Log in</a></li>
                     <li class="li_barra"><a href="register.php">Register</a></li>
                     <li class="li_barra"><a href="datuakaldatu.php">Datuak aldatu</a></li>
-                    <li class="li_barra"><a href="#">Log out</a></li>
+                    <li class="li_barra"><a href="logout.php">Log out</a></li>
                 </ul>
             </nav>
         </div>
