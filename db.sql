@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: db
--- Tiempo de generación: 07-10-2023 a las 18:51:28
+-- Tiempo de generación: 14-10-2023 a las 11:28:26
 -- Versión del servidor: 10.8.2-MariaDB-1:10.8.2+maria~focal
 -- Versión de PHP: 8.2.8
 
@@ -45,6 +45,34 @@ CREATE TABLE `ERABILTZAILE` (
 INSERT INTO `ERABILTZAILE` (`Izen_Abizenak`, `NAN`, `Telefonoa`, `Jaiotze_data`, `email`, `pasahitza`) VALUES
 ('Luken Escobero', '46374748D', 688696167, '2003-04-21', 'lukenescobero01@gmail.com', 'Admin');
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `OBJEKTUA`
+--
+
+CREATE TABLE `OBJEKTUA` (
+  `id` int(11) NOT NULL,
+  `izena` varchar(100) NOT NULL,
+  `neurria` varchar(10) NOT NULL,
+  `prezioa` decimal(10,0) NOT NULL,
+  `kolorea` varchar(100) NOT NULL,
+  `marka` varchar(100) NOT NULL,
+  `img` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `OBJEKTUA`
+--
+
+INSERT INTO `OBJEKTUA` (`id`, `izena`, `neurria`, `prezioa`, `kolorea`, `marka`, `img`) VALUES
+(11, 'a', 'a', 2, 'a', 'a', 'kamiseta3'),
+(12, 'aasaf', 'asfafasf', 2, 'adfaaa', 'asffas', 'kamiseta1'),
+(13, 'aasaf', 'asfafasf', 2, 'adfaaa', 'asffas', 'kamiseta1'),
+(14, 'a', 'a', 2, '2', 'aaa', 'kamiseta3'),
+(15, 'ADA', 'asffsf', 2, 'asffas', 'asfa', 'kamiseta3'),
+(16, 'asfasfs', 'asfafasaf', 343114, 'efdssgd', 'sdgdsgg', 'kamiseta1');
+
 --
 -- Índices para tablas volcadas
 --
@@ -54,6 +82,22 @@ INSERT INTO `ERABILTZAILE` (`Izen_Abizenak`, `NAN`, `Telefonoa`, `Jaiotze_data`,
 --
 ALTER TABLE `ERABILTZAILE`
   ADD PRIMARY KEY (`NAN`);
+
+--
+-- Indices de la tabla `OBJEKTUA`
+--
+ALTER TABLE `OBJEKTUA`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `OBJEKTUA`
+--
+ALTER TABLE `OBJEKTUA`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
