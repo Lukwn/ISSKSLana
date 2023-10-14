@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //insert-a idazten dugu eta prestatzen dugu egikaritzeko
     $sql = "INSERT INTO `ERABILTZAILE` (`Izen_Abizenak`, `NAN`, `Telefonoa`, `Jaiotze_data`, `email`, `pasahitza`) VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "ssssss", $izab, $nan, $tlf, $jd, $mail, $pass);
+    mysqli_stmt_bind_param($stmt, "ssisss", $izab, $nan, $tlf, $jd, $mail, $pass);
 
     if (mysqli_stmt_execute($stmt)) {
         echo '<script>alert("Erabiltzaile berria sortuta!")</script>';

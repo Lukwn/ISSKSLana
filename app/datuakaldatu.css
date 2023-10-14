@@ -90,6 +90,12 @@ body {
     margin-bottom: 10px;
 }
 
+.wrapper .upload{
+    position: relative;
+    width: 100%;
+    margin: 20px 0;
+}
+
 .wrapper .register-link {
     font-size: 14.5px;
     text-align: center;

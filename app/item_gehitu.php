@@ -15,8 +15,6 @@ if (isset($_POST['submit'])) {
     $uploadOk = 1;
     $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
 
-    echo exec('whoami');
-    echo $target_file;
 
     if (move_uploaded_file($_FILES["fitxategia"]["tmp_name"], $target_file)) {
         echo "The file ". basename( $_FILES["fitxategia"]["name"]). " has been uploaded.";
@@ -24,12 +22,12 @@ if (isset($_POST['submit'])) {
         echo "Sorry, there was an error uploading your file.";
     }
 
-    $img=basename( $_FILES["fitxategia"]["name"],".jpg");
+    $img="img/" . $_FILES["fitxategia"]["name"];
 
     //insert-a idazten dugu eta prestatzen dugu egikaritzeko
     $sql = "INSERT INTO `OBJEKTUA` (`izena`, `neurria`, `prezioa`, `kolorea`, `marka`, `img`) VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "ssssss", $izena, $neurria, $prezioa, $kolorea, $marka, $img);
+    mysqli_stmt_bind_param($stmt, "ssdsss", $izena, $neurria, $prezioa, $kolorea, $marka, $img);
 
     if (mysqli_stmt_execute($stmt)) {
         echo '<script>alert("Kamiseta igo da.")</script>';

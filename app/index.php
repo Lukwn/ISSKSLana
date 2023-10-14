@@ -42,7 +42,7 @@ session_destroy();
                 <input type="button" class="btn" onclick="window.location.href='register.php'"
                     value="Erregistratu"></input>
                 <input type="button" class="btn" onclick="window.location.href='login.php'" value="Login"></input>
-                <input type="button" class="btn" onclick="window.location.href='lista.html'"
+                <input type="button" class="btn" onclick="window.location.href='lista.php'"
                     value="Kamisetak kudeatu"></input>
                 <input type="button" class="btn" onclick="window.location.href='datuakaldatu.php'"
                     value="Datuak aldatu"></input>
