@@ -10,11 +10,11 @@ $ docker build -t="web" .
 ```
 $ docker-compose up -d
 ```
-3. img direktorioaren baimenak aldatua argazkiak igotzeko
+3. img direktorioaren baimenak aldatu argazkiak igotzeko
 ```
 $ sudo chmod 777 app
 ```
-4. Datu basearen dump-a importatu
+4. Datu basearen dump-a inportatu
 ```
 http://localhost:8890/ direkzioan root erabiltzailea eta root pasahitza erabiliz "importar" atalean db.sql fitxategia igo
 ```
