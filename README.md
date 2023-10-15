@@ -1,7 +1,7 @@
 # Kamiseta galeria
 # Asier Pérez, Oier Cao, Brando Insausti, Uhaitz Errekalde, Bitor Delgado eta Luken Escobero
 
-#Erabiltzeko instrukzioak
+# Erabiltzeko instrukzioak:
 1. Web irudia eraiki direktorioan egonda
 ```
 $ docker build -t="web" .
