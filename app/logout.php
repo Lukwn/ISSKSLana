@@ -6,7 +6,7 @@ if (isset($_REQUEST['logout'])) {
         exit();
     }
     else{
-        header("Location: /login.php");
+        header("Location: /index.php");
     }
 }
 ?>

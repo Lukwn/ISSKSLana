@@ -61,13 +61,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <header class="top-bar">
         <div class="barra">
-        <a href="index.php" class="logo_esteka"><img class="logo" src="./img/bag.png" alt="Logo Alt Text"></a>
+            <a href="index.php"><img class="logo" src="./img/bag.png" alt="Logo Alt Text"></a>
             <nav class="nav_barra">
                 <ul>
-                    <li class="li_barra"><a href="login.php">Log in</a></li>
-                    <li class="li_barra"><a href="register.php">Register</a></li>
-                    <li class="li_barra"><a href="datuakaldatu.php">Datuak aldatu</a></li>
-                    <li class="li_barra"><a href="logout.php">Log out</a></li>
+                    <li class="li_barra"><a href="item_gehitu.php">Kamiseta gehitu</a></li>
+
+                    <?php if (isset($_SESSION['ERAB'])) { ?>
+                        <li class="li_barra">
+                            <form method="POST" class="logout_botoia">
+                                <button class="btn btn-danger" name="logout">Logout</button>
+                            </form>
+                        </li>
+                    <?php } else { ?>
+                        <li class="li_barra"><a href="login.php">Log in</a></li>
+                        <li class="li_barra"><a href="register.php">Register</a></li>
+                    <?php } ?>
                 </ul>
             </nav>
         </div>

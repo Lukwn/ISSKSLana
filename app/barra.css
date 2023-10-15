@@ -15,9 +15,23 @@
     margin: 0 auto;
 }
 
-.top-bar .barra .logo {
+/*.top-bar .barra .logo {
     max-width: 5%;
-    height: auto; 
+    height: auto;
+    display: block;
+}*/
+
+.top-bar a {
+    text-decoration: none;
+    color: #fff;
+    display: inline-block; 
+    vertical-align: middle;
+    max-width: auto;
+}
+
+.top-bar a img {
+    max-width: 65px;
+    height: auto;
     display: block;
 }
 
@@ -36,12 +50,8 @@
     margin-right: 0;
 }
 
-.top-bar a {
-    text-decoration: none;
-    color: #fff;
-}
 .top-bar a:hover {
-  color: #000;
+    color: #000;
 }
 
 .logout_botoia {
@@ -60,6 +70,3 @@
 .logout_botoia button:hover {
     background-color: #cc0000;
 }
-
-
-

@@ -9,20 +9,20 @@ if (isset($_POST['submit'])) {
     $prezioa = $_POST['prezio'];
     $kolorea = $_POST['kolore'];
     $marka = $_POST['marka'];
-    
+
     $target_dir = "/var/www/html/img/";
     $target_file = $target_dir . basename($_FILES["fitxategia"]["name"]);
     $uploadOk = 1;
-    $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+    $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
 
 
     if (move_uploaded_file($_FILES["fitxategia"]["tmp_name"], $target_file)) {
-        echo "The file ". basename( $_FILES["fitxategia"]["name"]). " has been uploaded.";
+        echo "The file " . basename($_FILES["fitxategia"]["name"]) . " has been uploaded.";
     } else {
         echo "Sorry, there was an error uploading your file.";
     }
 
-    $img="img/" . $_FILES["fitxategia"]["name"];
+    $img = "img/" . $_FILES["fitxategia"]["name"];
 
     //insert-a idazten dugu eta prestatzen dugu egikaritzeko
     $sql = "INSERT INTO `OBJEKTUA` (`izena`, `neurria`, `prezioa`, `kolorea`, `marka`, `img`) VALUES (?, ?, ?, ?, ?, ?)";
@@ -56,13 +56,20 @@ if (isset($_POST['submit'])) {
 <body>
     <header class="top-bar">
         <div class="barra">
-            <a href="index.php" class="logo_esteka"><img class="logo" src="./img/bag.png" alt="Logo Alt Text"></a>
+            <a href="index.php"><img class="logo" src="./img/bag.png" alt="Logo Alt Text"></a>
             <nav class="nav_barra">
                 <ul>
-                    <li class="li_barra"><a href="login.php">Log in</a></li>
-                    <li class="li_barra"><a href="register.php">Register</a></li>
-                    <li class="li_barra"><a href="datuakaldatu.php">Datuak aldatu</a></li>
-                    <li class="li_barra"><a href="logout.php">Log out</a></li>
+                    <?php if (isset($_SESSION['ERAB'])) { ?>
+                        <li class="li_barra"><a href="datuakaldatu.php">Datuak aldatu</a></li>
+                        <li class="li_barra">
+                            <form method="POST" class="logout_botoia">
+                                <button class="btn btn-danger" name="logout">Logout</button>
+                            </form>
+                        </li>
+                    <?php } else { ?>
+                        <li class="li_barra"><a href="login.php">Log in</a></li>
+                        <li class="li_barra"><a href="register.php">Register</a></li>
+                    <?php } ?>
                 </ul>
             </nav>
         </div>
@@ -71,7 +78,7 @@ if (isset($_POST['submit'])) {
     <div class="gorputza">
         <div class="wrapper">
             <form action="item_gehitu.php" class="formularioa" method="POST" enctype="multipart/form-data">
-                <h1>Alkandora igo</h1>
+                <h1>Kamiseta igo</h1>
                 <div class="input-box">
                     <input type="text" placeholder="Izena" name="izena" id="izena" required>
                 </div>
