@@ -40,7 +40,7 @@ if (isset($_POST['submit'])) {
     $marka = $_POST['marka'];
 
 
-    if (isset($_FILES['fitxategia'])) {
+    if ($_FILES['fitxategia']['error'] !== 4) {
         if ($_FILES['fitxategia']['error'] === 0) {
             $target_dir = "/var/www/html/img/";
             $target_file = $target_dir . basename($_FILES["fitxategia"]["name"]);
@@ -60,7 +60,7 @@ if (isset($_POST['submit'])) {
     $sql = "UPDATE `OBJEKTUA` SET `izena`='$izena', `neurria`='$neurria', `prezioa`=$prezioa, `kolorea`='$kolorea', `marka`='$marka', `img`='$img' WHERE `id`=$id";
     $query = mysqli_query($conn, $sql);
     if ($query) {
-        echo '<script>alert("Datuak eguneratu dira!")</script>';
+        header("Location:./index.php");
     } else {
         echo '<script>alert("Error: ' . mysqli_error($conn) . '")</script>';
     }
