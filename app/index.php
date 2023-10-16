@@ -4,6 +4,11 @@ session_start();
 include "konexioa.php";
 include "logout.php";
 
+if (isset($_SESSION['img']) || isset($_SESSION['id'])) {
+	unset($_SESSION['img']);
+	unset($_SESSION['id']);
+}
+
 $sql = "SELECT * FROM OBJEKTUA";
 $produktuak = $conn->query($sql);
 
