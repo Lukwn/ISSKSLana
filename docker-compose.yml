@@ -1,14 +1,15 @@
+version: '3'
 services:
   web:
-     image: web
-     environment:
-       - ALLOW_OVERRIDE=true
-     ports:
-       - "81:80"
-     links:
-       - db
-     volumes:
-       - ./app:/var/www/html/
+    image: web
+    environment:
+      - ALLOW_OVERRIDE=true
+    ports:
+      - "81:80"
+    links:
+      - db
+    volumes:
+      - ./app:/var/www/html
 
   db:
     image: mariadb:10.8.2
@@ -32,4 +33,5 @@ services:
     environment:
       MYSQL_USER: admin
       MYSQL_PASSWORD: test
-      MYSQL_DATABASE: database                                  
+      MYSQL_DATABASE: database
+
