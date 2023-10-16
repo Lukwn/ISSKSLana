@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: db
--- Tiempo de generación: 15-10-2023 a las 14:25:52
+-- Tiempo de generación: 16-10-2023 a las 06:42:56
 -- Versión del servidor: 10.8.2-MariaDB-1:10.8.2+maria~focal
 -- Versión de PHP: 8.2.8
 
@@ -20,6 +20,28 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `database`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ERABILTZAILE`
+--
+
+CREATE TABLE `ERABILTZAILE` (
+  `Izen_Abizenak` varchar(40) NOT NULL,
+  `NAN` varchar(10) NOT NULL,
+  `Telefonoa` int(9) NOT NULL,
+  `Jaiotze_data` date NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `pasahitza` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `ERABILTZAILE`
+--
+
+INSERT INTO `ERABILTZAILE` (`Izen_Abizenak`, `NAN`, `Telefonoa`, `Jaiotze_data`, `email`, `pasahitza`) VALUES
+('Luken Escobero', '46374748D', 688696167, '2003-04-21', 'lukenescobero01@gmail.com', 'Admin');
 
 -- --------------------------------------------------------
 
@@ -50,6 +72,12 @@ INSERT INTO `OBJEKTUA` (`id`, `izena`, `neurria`, `prezioa`, `kolorea`, `marka`,
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `ERABILTZAILE`
+--
+ALTER TABLE `ERABILTZAILE`
+  ADD PRIMARY KEY (`NAN`);
 
 --
 -- Indices de la tabla `OBJEKTUA`
