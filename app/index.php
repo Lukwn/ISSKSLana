@@ -47,7 +47,8 @@ $produktuak = $conn->query($sql);
 			</nav>
 		</div>
 	</header>
-	<section class="erdian">
+	<section class="erdian">ç
+		<!-- Datu baseko produktuak taulako elementu guztiak iteratzen dira eta web orrialdearen html kodean gehitzen dira-->
 		<?php
 		while ($row = mysqli_fetch_assoc($produktuak)) {
 			?>

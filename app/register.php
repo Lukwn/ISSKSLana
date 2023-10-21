@@ -3,6 +3,7 @@ include "konexioa.php";
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    //Kode hau bakarrik egikaritzen da register.js script-a ez badu false bueltatzen
     $izab = $_POST['izab'];
     $nan = $_POST['NAN'];
     $tlf = $_POST['tlf'];
@@ -10,10 +11,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $mail = $_POST['mail'];
     $pass = $_POST['pass'];
 
+    //Datu basearen eskaera prestatzen dugu
     $sql = "INSERT INTO `ERABILTZAILE` (`Izen_Abizenak`, `NAN`, `Telefonoa`, `Jaiotze_data`, `email`, `pasahitza`) VALUES (?, ?, ?, ?, ?, ?)";
 
     $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "ssssss", $izab, $nan, $tlf, $jd, $mail, $pass); 
+    mysqli_stmt_bind_param($stmt, "ssssss", $izab, $nan, $tlf, $jd, $mail, $pass);
+    //Eskaera egikaritzen da eta ez badago errorerik orrialde nagusira joaten gara 
     if (mysqli_stmt_execute($stmt)) {
     } else {
         echo '<script>alert("Error: ' . mysqli_error($conn) . '")</script>';

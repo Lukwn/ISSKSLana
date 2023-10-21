@@ -3,19 +3,19 @@ include "konexioa.php";
 
 
 if (isset($_POST['submit'])) {
-    //js-a ez badu false bueltatzen hurrengo kodea egikaritzen da, non  insert-aren balioak atxitzen dira formulariotik
     $izena = $_POST['izena'];
     $neurria = $_POST['neurri'];
     $prezioa = $_POST['prezio'];
     $kolorea = $_POST['kolore'];
     $marka = $_POST['marka'];
 
+    //Irudia igotzeko bidea aldagaietan gordetzen dira, erabilerrazak izateko
     $target_dir = "/var/www/html/img/";
     $target_file = $target_dir . basename($_FILES["fitxategia"]["name"]);
     $uploadOk = 1;
     $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
 
-
+    //Erabiltzaileak igotako irudia igotzen da zerbitzariaren direktoriora
     if (move_uploaded_file($_FILES["fitxategia"]["tmp_name"], $target_file)) {
         echo "The file " . basename($_FILES["fitxategia"]["name"]) . " has been uploaded.";
     } else {

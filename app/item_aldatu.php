@@ -4,6 +4,7 @@ session_start();
 include "konexioa.php";
 include "logout.php";
 
+//Sesioaren superglobalean sartzen ditugu id-a eta irudiaren izena geroago izateko
 if (!isset($_SESSION['img']) || !isset($_SESSION['id'])) {
     $id = $_POST['item_id'];
     $_SESSION['id'] = $id;
@@ -39,8 +40,9 @@ if (isset($_POST['submit'])) {
     $kolorea = $_POST['kolorea'];
     $marka = $_POST['marka'];
 
-
+    //4. errorea ez dugu kontuan fitxategirik igo ez dela esan nahi duelako
     if ($_FILES['fitxategia']['error'] !== 4) {
+        //Error 0 bada irudia igotzean errorik ez dela egon esan nahi du, beraz, irudia igotzen da.
         if ($_FILES['fitxategia']['error'] === 0) {
             $target_dir = "/var/www/html/img/";
             $target_file = $target_dir . basename($_FILES["fitxategia"]["name"]);
