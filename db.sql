@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: db
--- Tiempo de generación: 16-10-2023 a las 06:42:56
+-- Tiempo de generación: 22-10-2023 a las 15:32:00
 -- Versión del servidor: 10.8.2-MariaDB-1:10.8.2+maria~focal
 -- Versión de PHP: 8.2.8
 
@@ -41,7 +41,10 @@ CREATE TABLE `ERABILTZAILE` (
 --
 
 INSERT INTO `ERABILTZAILE` (`Izen_Abizenak`, `NAN`, `Telefonoa`, `Jaiotze_data`, `email`, `pasahitza`) VALUES
-('Luken Escobero', '46374748D', 688696167, '2003-04-21', 'lukenescobero01@gmail.com', 'Admin');
+('Paco Pepe', '37113011G', 555555555, '2000-12-12', 'paco@mail.com', 'Paco'),
+('María Rodríguez', '42134930B', 987654321, '2020-12-12', 'mail2@mail.com', 'Maria'),
+('Luken Escobero', '46374748D', 688696167, '2003-04-21', 'lol@mail.com', 'Admin'),
+('Juan García', '99999999R', 123456789, '1970-12-12', 'mail@mail.com', 'Juan');
 
 -- --------------------------------------------------------
 
@@ -64,10 +67,14 @@ CREATE TABLE `OBJEKTUA` (
 --
 
 INSERT INTO `OBJEKTUA` (`id`, `izena`, `neurria`, `prezioa`, `kolorea`, `marka`, `img`) VALUES
-(11, 'a', 'a', 2, 'a', 'a', 'img/kamiseta3.jpg'),
-(12, 'aasaf', 'asfafasf', 2, 'adfaaa', 'asffas', 'img/kamiseta1.jpg'),
-(15, 'ADA', 'asffsf', 2, 'asffas', 'asfa', 'img/kamiseta3.jpg'),
-(16, 'asfasfs', 'asfafasaf', 343114, 'efdssgd', 'sdgdsgg', 'img/kamiseta1.jpg');
+(11, 'Marroi', 'L', 20, 'Marroia', 'Zara', 'img/kamiseta3.jpg'),
+(15, 'Beltza', 'S', 18, 'Beltza', 'Burshke', 'img/kamiseta2.jpg'),
+(16, 'Zuria', 'XXL', 100, 'Zuria', 'Pull', 'img/kamiseta1.jpg'),
+(18, 'Garestia', 'M', 2313, 'Marroia', 'Guzzi', 'img/kamiseta5.jpg'),
+(19, 'Grisa', 'XXXL', 100, 'Gris', 'Zaru', 'img/kamiseta4.jpg'),
+(20, 'Kamiseta', 'XS', 30, 'Urdina', 'Generikoa', 'img/camiseta.jpeg'),
+(23, 'Kamiseta', 'XXS', 17, 'Grisa', 'Zarza', 'img/kamiseta4.jpg'),
+(24, 'Patroia', 'XXL', 100, 'ASKO', 'Muyigual', 'img/gptr,1265x,front,black-c,330,402,600,600-bg,f8f8f8.jpg');
 
 --
 -- Índices para tablas volcadas
@@ -93,7 +100,7 @@ ALTER TABLE `OBJEKTUA`
 -- AUTO_INCREMENT de la tabla `OBJEKTUA`
 --
 ALTER TABLE `OBJEKTUA`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
