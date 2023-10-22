@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: db
--- Tiempo de generación: 22-10-2023 a las 18:07:29
+-- Tiempo de generación: 22-10-2023 a las 18:41:12
 -- Versión del servidor: 10.8.2-MariaDB-1:10.8.2+maria~focal
 -- Versión de PHP: 8.2.8
 
@@ -46,6 +46,35 @@ INSERT INTO `ERABILTZAILE` (`Izen_Abizenak`, `NAN`, `Telefonoa`, `Jaiotze_data`,
 ('Luken Escobero', '46374748D', 123456789, '2003-04-21', 'lol@mail.com', 'Admin'),
 ('Juan García', '99999999R', 123456789, '1970-12-12', 'mail@mail.com', 'Juan');
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `OBJEKTUA`
+--
+
+CREATE TABLE `OBJEKTUA` (
+  `id` int(11) NOT NULL,
+  `izena` varchar(100) NOT NULL,
+  `neurria` varchar(10) NOT NULL,
+  `prezioa` decimal(10,0) NOT NULL,
+  `kolorea` varchar(100) NOT NULL,
+  `marka` varchar(100) NOT NULL,
+  `img` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `OBJEKTUA`
+--
+
+INSERT INTO `OBJEKTUA` (`id`, `izena`, `neurria`, `prezioa`, `kolorea`, `marka`, `img`) VALUES
+(11, 'Marroi', 'L', 20, 'Marroia', 'Zara', 'img/kamiseta3.jpg'),
+(15, 'Beltza', 'S', 18, 'Beltza', 'Burshke', 'img/kamiseta2.jpg'),
+(16, 'Zuria', 'XXL', 100, 'Zuria', 'Pull', 'img/kamiseta1.jpg'),
+(19, 'Grisa', 'XXXL', 100, 'Gris', 'Zaru', 'img/kamiseta4.jpg'),
+(20, 'Kamiseta', 'XS', 30, 'Urdina', 'Generikoa', 'img/camiseta.jpeg'),
+(23, 'Kamiseta', 'XXS', 17, 'Grisa', 'Zarza', 'img/kamiseta4.jpg'),
+(24, 'Patroia', 'XXL', 100, 'ASKO', 'Muyigual', 'img/gptr,1265x,front,black-c,330,402,600,600-bg,f8f8f8.jpg');
+
 --
 -- Índices para tablas volcadas
 --
@@ -55,6 +84,22 @@ INSERT INTO `ERABILTZAILE` (`Izen_Abizenak`, `NAN`, `Telefonoa`, `Jaiotze_data`,
 --
 ALTER TABLE `ERABILTZAILE`
   ADD PRIMARY KEY (`NAN`);
+
+--
+-- Indices de la tabla `OBJEKTUA`
+--
+ALTER TABLE `OBJEKTUA`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `OBJEKTUA`
+--
+ALTER TABLE `OBJEKTUA`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
