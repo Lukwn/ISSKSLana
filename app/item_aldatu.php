@@ -46,18 +46,17 @@ if (isset($_POST['submit'])) {
         if ($_FILES['fitxategia']['error'] === 0) {
             $target_dir = "/var/www/html/img/";
             $target_file = $target_dir . basename($_FILES["fitxategia"]["name"]);
-
-            if (move_uploaded_file($_FILES["fitxategia"]["tmp_name"], $target_file)) {
-                $img = "img/" . $_FILES["fitxategia"]["name"];
-            } else {
-                echo "Errore bat egon da argazkia igotzerakoan.";
+            if (!file_exists($target_file)) {
+                if (move_uploaded_file($_FILES["fitxategia"]["tmp_name"], $target_file)) {
+                } else {
+                    echo "Errore bat egon da argazkia igotzerakoan.";
+                }
             }
         } else {
             echo "File upload error: " . $_FILES['fitxategia']['error'];
         }
+        $img = "img/" . $_FILES["fitxategia"]["name"];
     }
-
-
     //update-aren eskaera idazten dugu
     $sql = "UPDATE `OBJEKTUA` SET `izena`='$izena', `neurria`='$neurria', `prezioa`=$prezioa, `kolorea`='$kolorea', `marka`='$marka', `img`='$img' WHERE `id`=$id";
     $query = mysqli_query($conn, $sql);
@@ -107,7 +106,7 @@ if (isset($_POST['submit'])) {
     </header>
     <div class="gorputza">
         <div class="wrapper">
-            <form  action="item_aldatu.php" class="formularioa" method="POST" enctype="multipart/form-data">
+            <form action="item_aldatu.php" class="formularioa" method="POST" enctype="multipart/form-data">
                 <h1>
                     <?php echo $izena ?>
                     kamisetaren datuak aldatu.

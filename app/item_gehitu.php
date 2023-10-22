@@ -16,10 +16,12 @@ if (isset($_POST['submit'])) {
     $imageFileType = pathinfo($target_file, PATHINFO_EXTENSION);
 
     //Erabiltzaileak igotako irudia igotzen da zerbitzariaren direktoriora
-    if (move_uploaded_file($_FILES["fitxategia"]["tmp_name"], $target_file)) {
-        echo "The file " . basename($_FILES["fitxategia"]["name"]) . " has been uploaded.";
-    } else {
-        echo "Errore bat egon da argazkia igotzerakoan.";
+    if (!file_exists($target_file)) {
+        if (move_uploaded_file($_FILES["fitxategia"]["tmp_name"], $target_file)) {
+            $img = "img/" . $_FILES["fitxategia"]["name"];
+        } else {
+            echo "Errore bat egon da argazkia igotzerakoan.";
+        }
     }
 
     $img = "img/" . $_FILES["fitxategia"]["name"];
