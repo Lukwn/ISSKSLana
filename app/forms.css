@@ -8,7 +8,7 @@
 }
 
 body {
-    background: url('./img/img.jpg') no-repeat;
+    background: url('./source/img.jpg') no-repeat;
     background-size: cover;
     background-position: center;
 }
@@ -113,8 +113,14 @@ body {
 
 }
 
+/* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }

@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <header class="top-bar">
         <div class="barra">
-            <a href="index.php"><img class="logo" src="./img/bag.png" alt="Logo Alt Text"></a>
+            <a href="index.php"><img class="logo" src="./source/bag.png" alt="Logo Alt Text"></a>
             <nav class="nav_barra">
                 <ul>
                     <li class="li_barra"><a href="item_gehitu.php">Kamiseta gehitu</a></li>
@@ -97,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         NAN-a
                     </div>
                     <div class="input-box">
-                        <input type="text" value="<?php echo $nan; ?>" name="NAN" id="NAN" required>
+                        <input type="text" value="<?php echo $nan; ?>" name="NAN" id="NAN"  disabled required>
                     </div>
                     <div class="azalpen-test">
                         Telefono zenbakia

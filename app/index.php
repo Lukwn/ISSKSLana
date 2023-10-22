@@ -28,7 +28,7 @@ $produktuak = $conn->query($sql);
 <body>
 	<header class="top-bar">
 		<div class="barra">
-			<a href="index.php"><img class="logo" src="./img/bag.png" alt="Logo Alt Text"></a>
+			<a href="index.php"><img class="logo" src="./source/bag.png" alt="Logo Alt Text"></a>
 			<nav class="nav_barra">
 				<ul>
 					<li class="li_barra"><a href="item_gehitu.php">Kamiseta gehitu</a></li>
@@ -47,7 +47,7 @@ $produktuak = $conn->query($sql);
 			</nav>
 		</div>
 	</header>
-	<section class="erdian">ç
+	<section class="erdian">
 		<!-- Datu baseko produktuak taulako elementu guztiak iteratzen dira eta web orrialdearen html kodean gehitzen dira-->
 		<?php
 		while ($row = mysqli_fetch_assoc($produktuak)) {

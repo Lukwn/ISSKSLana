@@ -3,7 +3,7 @@ include "konexioa.php";
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    //Kode hau bakarrik egikaritzen da register.js script-a ez badu false bueltatzen
+    // Kode hau bakarrik egikaritzen da register.js script-a ez badu false bueltatzen
     $izab = $_POST['izab'];
     $nan = $_POST['NAN'];
     $tlf = $_POST['tlf'];
@@ -11,20 +11,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $mail = $_POST['mail'];
     $pass = $_POST['pass'];
 
-    //Datu basearen eskaera prestatzen dugu
-    $sql = "INSERT INTO `ERABILTZAILE` (`Izen_Abizenak`, `NAN`, `Telefonoa`, `Jaiotze_data`, `email`, `pasahitza`) VALUES (?, ?, ?, ?, ?, ?)";
+    $sql = "SELECT * FROM ERABILTZAILE WHERE NAN = '$nan'";
+    $query = mysqli_query($conn, $sql);
 
-    $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "ssssss", $izab, $nan, $tlf, $jd, $mail, $pass);
-    //Eskaera egikaritzen da eta ez badago errorerik orrialde nagusira joaten gara 
-    if (mysqli_stmt_execute($stmt)) {
-    } else {
-        echo '<script>alert("Error: ' . mysqli_error($conn) . '")</script>';
+    if ($query) {
+        // kontsultaren lerro emaitz kopurua kontatzen dira, 0 baino handiagoa bada erabiltzailea dagoela esan nahi du eta saioa hasiko da.
+        $num_lerro = mysqli_num_rows($query);
+        if ($num_lerro == 0) {
+            // Datu basearen eskaera prestatzen dugu
+            $sql = "INSERT INTO `ERABILTZAILE` (`Izen_Abizenak`, `NAN`, `Telefonoa`, `Jaiotze_data`, `email`, `pasahitza`) VALUES (?, ?, ?, ?, ?, ?)";
+
+            $stmt = mysqli_prepare($conn, $sql);
+            mysqli_stmt_bind_param($stmt, "ssssss", $izab, $nan, $tlf, $jd, $mail, $pass);
+
+            // Eskaera egikaritzen da eta ez badago errorerik orrialde nagusira joaten gara
+            if (mysqli_stmt_execute($stmt)) {
+                // Erregistratu da
+                echo '<script>alert("Erregistratu da")</script>';
+
+            } else {
+                echo '<script>alert("Error: ' . mysqli_error($conn) . '")</script>';
+            }
+
+            mysqli_close($conn);
+        } else {
+            echo '<script>alert("NAN hori duen erabiltzailea badago")</script>';
+        }
     }
-
-    mysqli_close($conn);
-    header("Location:./index.php");
 }
+
 
 ?>
 <!DOCTYPE html>
@@ -43,10 +58,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <header class="top-bar">
         <div class="barra">
-            <a href="index.php"><img class="logo" src="./img/bag.png" alt="Logo Alt Text"></a>
+            <a href="index.php"><img class="logo" src="./source/bag.png" alt="Logo Alt Text"></a>
             <nav class="nav_barra">
                 <ul>
-                <li class="li_barra"><a href="item_gehitu.php">Kamiseta gehitu</a></li>
+                    <li class="li_barra"><a href="item_gehitu.php">Kamiseta gehitu</a></li>
                     <?php if (isset($_SESSION['ERAB'])) { ?>
                         <li class="li_barra"><a href="datuakaldatu.php">Datuak aldatu</a></li>
                         <li class="li_barra">

@@ -55,7 +55,7 @@ if (isset($_REQUEST['login'])) {
 <body>
     <header class="top-bar">
         <div class="barra">
-            <a href="index.php"><img class="logo" src="./img/bag.png" alt="Logo Alt Text"></a>
+            <a href="index.php"><img class="logo" src="./source/bag.png" alt="Logo Alt Text"></a>
             <nav class="nav_barra">
                 <ul>
                     <li class="li_barra"><a href="item_gehitu.php">Kamiseta gehitu</a></li>

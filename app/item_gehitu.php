@@ -19,7 +19,7 @@ if (isset($_POST['submit'])) {
     if (move_uploaded_file($_FILES["fitxategia"]["tmp_name"], $target_file)) {
         echo "The file " . basename($_FILES["fitxategia"]["name"]) . " has been uploaded.";
     } else {
-        echo "Sorry, there was an error uploading your file.";
+        echo "Errore bat egon da argazkia igotzerakoan.";
     }
 
     $img = "img/" . $_FILES["fitxategia"]["name"];
@@ -56,7 +56,7 @@ if (isset($_POST['submit'])) {
 <body>
     <header class="top-bar">
         <div class="barra">
-            <a href="index.php"><img class="logo" src="./img/bag.png" alt="Logo Alt Text"></a>
+            <a href="index.php"><img class="logo" src="./source/bag.png" alt="Logo Alt Text"></a>
             <nav class="nav_barra">
                 <ul>
                     <?php if (isset($_SESSION['ERAB'])) { ?>

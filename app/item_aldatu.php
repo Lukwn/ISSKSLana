@@ -50,7 +50,7 @@ if (isset($_POST['submit'])) {
             if (move_uploaded_file($_FILES["fitxategia"]["tmp_name"], $target_file)) {
                 $img = "img/" . $_FILES["fitxategia"]["name"];
             } else {
-                echo "Sorry, there was an error uploading your file.";
+                echo "Errore bat egon da argazkia igotzerakoan.";
             }
         } else {
             echo "File upload error: " . $_FILES['fitxategia']['error'];
@@ -85,7 +85,7 @@ if (isset($_POST['submit'])) {
 <body>
     <header class="top-bar">
         <div class="barra">
-            <a href="index.php"><img class="logo" src="./img/bag.png" alt="Logo Alt Text"></a>
+            <a href="index.php"><img class="logo" src="./source/bag.png" alt="Logo Alt Text"></a>
             <nav class="nav_barra">
                 <ul>
                     <li class="li_barra"><a href="item_gehitu.php">Kamiseta gehitu</a></li>
@@ -107,7 +107,7 @@ if (isset($_POST['submit'])) {
     </header>
     <div class="gorputza">
         <div class="wrapper">
-            <form class="formularioa" method="POST" enctype="multipart/form-data">
+            <form  action="item_aldatu.php" class="formularioa" method="POST" enctype="multipart/form-data">
                 <h1>
                     <?php echo $izena ?>
                     kamisetaren datuak aldatu.
