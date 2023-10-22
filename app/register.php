@@ -88,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="text" placeholder="NAN, eg: 11111111Z" name="NAN" id="NAN" required>
                 </div>
                 <div class="input-box">
-                    <input type="number" placeholder="Telefonoa, 9 zenbaki" name="tlf" id="tlf" required>
+                    <input type="text" placeholder="Telefonoa, 9 zenbaki" name="tlf" id="tlf" required>
                 </div>
                 <div class="input-box">
                     <input type="text" placeholder="Jaiotze data, eg: 2021-08-26" name="jd" id="jd" required>

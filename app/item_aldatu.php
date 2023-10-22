@@ -36,7 +36,7 @@ if (isset($_POST['submit'])) {
     //js-a ez badu false bueltatzen hurrengo kodea egikaritzen da, non  insert-aren balioak atxitzen dira formulariotik
     $izena = $_POST['izena'];
     $neurria = $_POST['neurria'];
-    $prezioa = $_POST['prezioa'];
+    $prezioa = $_POST['prezio'];
     $kolorea = $_POST['kolorea'];
     $marka = $_POST['marka'];
 
@@ -79,6 +79,8 @@ if (isset($_POST['submit'])) {
     <link rel="stylesheet" href="datuakaldatu.css">
     <link rel="stylesheet" href="./barra.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="./register.js"></script>
+
 </head>
 
 <body>
@@ -106,7 +108,7 @@ if (isset($_POST['submit'])) {
     </header>
     <div class="gorputza">
         <div class="wrapper">
-            <form action="item_aldatu.php" class="formularioa" method="POST" enctype="multipart/form-data">
+            <form action="item_aldatu.php" class="formularioa" method="POST" enctype="multipart/form-data" onsubmit="return prezioZenbakia();">
                 <h1>
                     <?php echo $izena ?>
                     kamisetaren datuak aldatu.
@@ -127,7 +129,7 @@ if (isset($_POST['submit'])) {
                     Prezioa
                 </div>
                 <div class="input-box">
-                    <input type="number" value="<?php echo $prezioa; ?>" name="prezioa" id="prezioa" required>
+                    <input type="text" value="<?php echo $prezioa; ?>" name="prezio" id="prezio" required>
                 </div>
                 <div class="azalpen-test">
                     Kolorea

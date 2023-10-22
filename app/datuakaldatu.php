@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_stmt_bind_param($stmt, "sssssss", $izab, $nan, $tlf, $jd, $mail, $pass, $_SESSION['ERAB']['NAN']);
 
     if (mysqli_stmt_execute($stmt)) {
-        echo '<script>alert("Datuak eguneratu dira!")</script>';
+        header("Location: /datuakaldatu.php");
     } else {
         echo '<script>alert("Error: ' . mysqli_error($conn) . '")</script>';
     }
@@ -56,6 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="datuakaldatu.css">
     <link rel="stylesheet" href="./barra.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="./register.js"></script>
 </head>
 
 <body>
@@ -83,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="gorputza">
         <div class="wrapper">
             <?php if (isset($_SESSION['ERAB'])) { ?>
-                <form class="formularioa" method="POST" onsubmit="return erregistroaBaieztatu();">
+                <form action="datuakaldatu.php" class="formularioa" method="POST" onsubmit="return erregistroaBaieztatu();">
                     <h1>Zure datuak aldatu,
                         <?php echo $_SESSION['ERAB']['izena']; ?>
                     </h1>
@@ -103,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         Telefono zenbakia
                     </div>
                     <div class="input-box">
-                        <input type="number" value="<?php echo $tlf; ?>" name="tlf" id="tlf" required>
+                        <input type="text" value="<?php echo $tlf; ?>" name="tlf" id="tlf" required>
                     </div>
                     <div class="azalpen-test">
                         Jaiotze data

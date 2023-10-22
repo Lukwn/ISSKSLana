@@ -79,7 +79,7 @@ if (isset($_POST['submit'])) {
 
     <div class="gorputza">
         <div class="wrapper">
-            <form action="item_gehitu.php" class="formularioa" method="POST" enctype="multipart/form-data">
+            <form action="item_gehitu.php" class="formularioa" method="POST" enctype="multipart/form-data" onsubmit="return prezioZenbakia();">
                 <h1>Kamiseta igo</h1>
                 <div class="input-box">
                     <input type="text" placeholder="Izena" name="izena" id="izena" required>
@@ -88,7 +88,7 @@ if (isset($_POST['submit'])) {
                     <input type="text" placeholder="Neurria" name="neurri" id="neurri" required>
                 </div>
                 <div class="input-box">
-                    <input type="number" placeholder="Prezioa" name="prezio" id="prezio" required>
+                    <input type="text" placeholder="Prezioa" name="prezio" id="prezio" required>
                 </div>
                 <div class="input-box">
                     <input type="text" placeholder="Kolorea" name="kolore" id="kolore" required>

@@ -1,6 +1,6 @@
 function erregistroaBaieztatu() {
     //izena huts dagoen edo zenbakirik duen begiratzen da
-    if (document.getElementById('izab').value === '' || !isNaN(document.getElementById('izab').value)) {
+    if (document.getElementById('izab').value === '' || /\d/.test(document.getElementById('izab').value)) {
         alert("Izena hutsik dago edo zenbaki bat du.");
         return false;
     }
@@ -37,6 +37,12 @@ function erregistroaBaieztatu() {
     //mail-aren formatua zuzena dela frogatzen da
     if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(document.getElementById('mail').value)) {
         alert("E-maila ez da zuzena.");
+        return false;
+    }
+}
+function prezioZenbakia(){
+    if(isNaN(document.getElementById('prezio').value)){
+        alert("Prezioan zenbaki bat egon behar da.");
         return false;
     }
 }
