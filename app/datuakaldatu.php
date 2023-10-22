@@ -97,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         NAN-a
                     </div>
                     <div class="input-box">
-                        <input type="text" value="<?php echo $nan; ?>" name="NAN" id="NAN"  disabled required>
+                        <input type="text" value="<?php echo $nan; ?>" name="NAN" id="NAN" required readonly>
                     </div>
                     <div class="azalpen-test">
                         Telefono zenbakia

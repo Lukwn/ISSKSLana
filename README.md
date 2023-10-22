@@ -6,13 +6,13 @@
 ```
 $ docker build -t="web" .
 ```
-2. Zerbitzuen edukiontziak hasi detached moduan
+2. img direktorioaren baimenak aldatu argazkiak igotzeko
+```
+$ sudo chmod 777 app/img
+```
+3. Zerbitzuen edukiontziak hasi detached moduan
 ```
 $ docker-compose up -d
-```
-3. img direktorioaren baimenak aldatu argazkiak igotzeko
-```
-$ sudo chmod 777 app
 ```
 4. Datu basearen dump-a inportatu
 ```
