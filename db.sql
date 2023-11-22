@@ -33,18 +33,16 @@ CREATE TABLE `ERABILTZAILE` (
   `Telefonoa` int(9) NOT NULL,
   `Jaiotze_data` date NOT NULL,
   `email` varchar(100) NOT NULL,
-  `pasahitza` varchar(100) NOT NULL
+  `pasahitza` varchar(100) NOT NULL,
+  `salt` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `ERABILTZAILE`
 --
 
-INSERT INTO `ERABILTZAILE` (`Izen_Abizenak`, `NAN`, `Telefonoa`, `Jaiotze_data`, `email`, `pasahitza`) VALUES
-('Paco Pepe', '37113011G', 555555555, '2000-12-12', 'paco@mail.com', 'Paco'),
-('María Rodríguez', '42134930B', 987654321, '2020-12-12', 'mail2@mail.com', 'Maria'),
-('Luken Escobero', '46374748D', 123456789, '2003-04-21', 'lol@mail.com', 'Admin'),
-('Juan García', '99999999R', 123456789, '1970-12-12', 'mail@mail.com', 'Juan');
+INSERT INTO `ERABILTZAILE` (`Izen_Abizenak`, `NAN`, `Telefonoa`, `Jaiotze_data`, `email`, `pasahitza`, `salt`) VALUES
+('Luken Escobero', '46374748D', 123456789, '2003-04-21', 'lol@mail.com', '$2y$10$zebi0z7i5eCAmfVY8h8Z0.Njul7IH6yz5NsXpLM35um6IOwgdwvsa', 'd1b65f4963452be3a3aad1ae54d877a4');
 
 -- --------------------------------------------------------
 
@@ -105,3 +103,4 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+

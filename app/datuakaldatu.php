@@ -16,7 +16,7 @@ if (isset($_SESSION['ERAB'])) {
         $tlf = $lerroa['Telefonoa'];
         $jd = $lerroa['Jaiotze_data'];
         $mail = $lerroa['email'];
-        $pass = $lerroa['pasahitza'];
+        $salt = $lerroa['salt'];
     }
 }
 
@@ -28,11 +28,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $jd = $_POST['jd'];
     $mail = $_POST['mail'];
     $pass = $_POST['pass'];
+    
+    if($pass!=''){
+    	//gatza sortu “16 byte”
+        $salt=bin2hex(random_bytes(16));
+       	 
+        //pasahitza eta gatza batu
+        $passSalt=$pass.$salt;
+       	 
+        //hash-a sortu
+   	$hashedpass = password_hash($passSalt, PASSWORD_DEFAULT);
+    }
+    else{
+    	$hashedpass = $pass;
+    }
 
     //update-aren eskaera idazten dugu
-    $sql = "UPDATE `ERABILTZAILE` SET `Izen_Abizenak`=?, `NAN`=?, `Telefonoa`=?, `Jaiotze_data`=?, `email`=?, `pasahitza`=? WHERE `NAN`=?";
+    $sql = "UPDATE `ERABILTZAILE` SET `Izen_Abizenak`=?, `NAN`=?, `Telefonoa`=?, `Jaiotze_data`=?, `email`=?, `pasahitza`=?, `salt`=? WHERE `NAN`=?";
     $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "sssssss", $izab, $nan, $tlf, $jd, $mail, $pass, $_SESSION['ERAB']['NAN']);
+    mysqli_stmt_bind_param($stmt, "ssssssss", $izab, $nan, $tlf, $jd, $mail, $hashedpass, $salt, $_SESSION['ERAB']['NAN']);
 
     if (mysqli_stmt_execute($stmt)) {
         header("Location: /datuakaldatu.php");
@@ -119,10 +133,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <input type="text" value="<?php echo $mail; ?>" name="mail" id="mail" required>
                     </div>
                     <div class="azalpen-test">
-                        Pasahitza
+                        Pasahitza (idatzi berri bat aurrekoa aldatzeko)
                     </div>
                     <div class="input-box">
-                        <input type="text" value="<?php echo $pass; ?>" name="pass" id="pass" required>
+                        <input type="password" value="" name="pass" id="pass" required>
                     </div>
                     <button type="submit" class="btn">Aldatu</button>
                 </form>
