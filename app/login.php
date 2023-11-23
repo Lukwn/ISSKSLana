@@ -37,16 +37,26 @@ if (isset($_REQUEST['login'])) {
             	$_SESSION['ERAB'] = array();
             	$_SESSION['ERAB']['izena'] = $lerroa['Izen_Abizenak'];
             	$_SESSION['ERAB']['NAN'] = $lerroa['NAN'];
+
+				$archivoLog = 'actions.log';
+				$ipAddress = $_SERVER['REMOTE_ADDR'];
+				$toLog = "Intento de log in from IP $ipAddress - " . $lerroa['NAN'] . " " . $pass;
+				$archivo = fopen($archivoLog, 'a');
+				$fechaHora = date('Y-m-d H:i:s');
+				$mensajeLog = "[$fechaHora] $toLog\n";  // Use $toLog instead of $mensaje
+				fwrite($archivo, $mensajeLog);
+				fclose($archivo);
+
             	header("Location:./datuakaldatu.php");
             	exit();
         	} else {
-            	echo '<script>alert("Pasahitza ez da zuzena!")</script>';
+            	echo '<script>alert("NAN-a edo pasahitza ez dira egokiak.")</script>';
         	}
     	} else {
-        	echo '<script>alert("Ez dago NAN hori duen erabiltzailerik.")</script>';
+        	echo '<script>alert("NAN-a edo pasahitza ez dira egokiak.")</script>';
     	}
 	} else {
-    	echo '<script>alert("Errore bat egon da datu basea atzitzean.")</script>';
+    	echo '<script>alert("Errore bat egon da.")</script>';
 	}
 }
 ?>
