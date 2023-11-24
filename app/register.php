@@ -10,12 +10,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$jd = $_POST['jd'];
 	$mail = $_POST['mail'];
 	$pass = $_POST['pass'];
-
-	$sql = "SELECT * FROM ERABILTZAILE WHERE NAN = '$nan'";
-	$query = mysqli_query($conn, $sql);
+	
+	$sql = "SELECT * FROM ERABILTZAILE WHERE NAN = ?";
+	$stmt = mysqli_prepare($conn, $sql);
+	if ($stmt === false) {
+		die("Error in preparing the statement: " . mysqli_error($conn)); //Hau log-ean sartu beharko da.
+	}
+	mysqli_stmt_bind_param($stmt, "s", $nan);
+	mysqli_stmt_execute($stmt);
+	$result = mysqli_stmt_get_result($stmt);
 
 	if ($query) {
-    	// kontsultaren lerro emaitz kopurua kontatzen dira, 0 baino handiagoa bada erabiltzailea dagoela esan nahi du eta saioa hasiko da.
+    	// kontsultaren lerro emaitz kopurua kontatzen dira, 0 baino handiagoa bada erabiltzailea jadanik datu basean dagoela esan nahi du eta erregisterra ez da egingo.
     	$num_lerro = mysqli_num_rows($query);
     	if ($num_lerro == 0) {
    	 
