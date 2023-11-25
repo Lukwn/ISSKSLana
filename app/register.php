@@ -79,20 +79,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     	<div class="barra">
         	<a href="index.php"><img class="logo" src="./source/bag.png" alt="Logo Alt Text"></a>
         	<nav class="nav_barra">
-            	<ul>
-                	<li class="li_barra"><a href="item_gehitu.php">Kamiseta gehitu</a></li>
-                	<?php if (isset($_SESSION['ERAB'])) { ?>
-                    	<li class="li_barra"><a href="datuakaldatu.php">Datuak aldatu</a></li>
-                    	<li class="li_barra">
-                        	<form method="POST" class="logout_botoia">
-                            	<button class="btn btn-danger" name="logout">Logout</button>
-                        	</form>
-                    	</li>
-                	<?php } else { ?>
-                    	<li class="li_barra"><a href="login.php">Log in</a></li>
-                	<?php } ?>
-            	</ul>
-        	</nav>
+				<ul>
+					<?php if (isset($_SESSION['ERAB'])) { ?>
+						<li class="li_barra"><a href="item_gehitu.php">Kamiseta gehitu</a></li>
+						<li class="li_barra"><a href="datuakaldatu.php">Datuak aldatu</a></li>
+						<li class="li_barra">
+							<form method="POST" class="logout_botoia">
+								<button class="btn btn-danger" name="logout">Logout</button>
+							</form>
+						</li>
+					<?php } else { ?>
+						<li class="li_barra"><a href="login.php">Log in</a></li>
+						<li class="li_barra"><a href="register.php">Register</a></li>
+					<?php } ?>
+				</ul>
+			</nav>
     	</div>
 	</header>
 

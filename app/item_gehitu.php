@@ -1,6 +1,8 @@
 <?php
-include "konexioa.php";
+session_start();
 
+include "konexioa.php";
+include "logout.php";
 
 if (isset($_POST['submit'])) {
     $izena = $_POST['izena'];
@@ -8,6 +10,7 @@ if (isset($_POST['submit'])) {
     $prezioa = $_POST['prezio'];
     $kolorea = $_POST['kolore'];
     $marka = $_POST['marka'];
+    $nan = $_SESSION['ERAB']['NAN'];
 
     //Irudia igotzeko bidea aldagaietan gordetzen dira, erabilerrazak izateko
     $target_dir = "/var/www/html/img/";
@@ -27,13 +30,13 @@ if (isset($_POST['submit'])) {
     $img = "img/" . $_FILES["fitxategia"]["name"];
 
     //insert-a idazten dugu eta prestatzen dugu egikaritzeko
-    $sql = "INSERT INTO `OBJEKTUA` (`izena`, `neurria`, `prezioa`, `kolorea`, `marka`, `img`) VALUES (?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO `OBJEKTUA` (`izena`, `neurria`, `prezioa`, `kolorea`, `marka`, `img`, `erab`) VALUES (?, ?, ?, ?, ?, ?,?)";
     $stmt = mysqli_prepare($conn, $sql);
     if ($stmt === false) {
-		die("Errorea: " . mysqli_error($conn)); //Hau log-ean sartu beharko da.
-	}
-    mysqli_stmt_bind_param($stmt, "ssdsss", $izena, $neurria, $prezioa, $kolorea, $marka, $img);
-    
+        die("Errorea: " . mysqli_error($conn)); //Hau log-ean sartu beharko da.
+    }
+    mysqli_stmt_bind_param($stmt, "ssdssss", $izena, $neurria, $prezioa, $kolorea, $marka, $img, $nan);
+
     if (mysqli_stmt_execute($stmt)) {
         echo '<script>alert("Kamiseta igo da.")</script>';
     } else {
@@ -65,6 +68,7 @@ if (isset($_POST['submit'])) {
             <nav class="nav_barra">
                 <ul>
                     <?php if (isset($_SESSION['ERAB'])) { ?>
+                        <li class="li_barra"><a href="item_gehitu.php">Kamiseta gehitu</a></li>
                         <li class="li_barra"><a href="datuakaldatu.php">Datuak aldatu</a></li>
                         <li class="li_barra">
                             <form method="POST" class="logout_botoia">
@@ -82,31 +86,36 @@ if (isset($_POST['submit'])) {
 
     <div class="gorputza">
         <div class="wrapper">
-            <form action="item_gehitu.php" class="formularioa" method="POST" enctype="multipart/form-data" onsubmit="return prezioZenbakia();">
-                <h1>Kamiseta igo</h1>
-                <div class="input-box">
-                    <input type="text" placeholder="Izena" name="izena" id="izena" required>
-                </div>
-                <div class="input-box">
-                    <input type="text" placeholder="Neurria" name="neurri" id="neurri" required>
-                </div>
-                <div class="input-box">
-                    <input type="text" placeholder="Prezioa" name="prezio" id="prezio" required>
-                </div>
-                <div class="input-box">
-                    <input type="text" placeholder="Kolorea" name="kolore" id="kolore" required>
-                </div>
-                <div class="input-box">
-                    <input type="text" placeholder="Marka" name="marka" id="marka" required>
-                </div>
-                <div class="azalpen-test">
-                    Argazkia aukeratu:
-                </div>
-                <div class="upload">
-                    <input type="file" name="fitxategia" id="fitxategia">
-                </div>
-                <button type="submit" name="submit" class="btn">Erregistratu</button>
-            </form>
+            <?php if (isset($_SESSION['ERAB'])) { ?>
+                <form action="item_gehitu.php" class="formularioa" method="POST" enctype="multipart/form-data" onsubmit="return prezioZenbakia();">
+                    <h1>Kamiseta igo</h1>
+                    <div class="input-box">
+                        <input type="text" placeholder="Izena" name="izena" id="izena" required>
+                    </div>
+                    <div class="input-box">
+                        <input type="text" placeholder="Neurria" name="neurri" id="neurri" required>
+                    </div>
+                    <div class="input-box">
+                        <input type="text" placeholder="Prezioa" name="prezio" id="prezio" required>
+                    </div>
+                    <div class="input-box">
+                        <input type="text" placeholder="Kolorea" name="kolore" id="kolore" required>
+                    </div>
+                    <div class="input-box">
+                        <input type="text" placeholder="Marka" name="marka" id="marka" required>
+                    </div>
+                    <div class="azalpen-test">
+                        Argazkia aukeratu:
+                    </div>
+                    <div class="upload">
+                        <input type="file" name="fitxategia" id="fitxategia">
+                    </div>
+                    <button type="submit" name="submit" class="btn">Erregistratu</button>
+                </form>
+            <?php } else { ?>
+                <h1>Saioa hasi behar duzu kamiseta bat gehitzeko.</h1>
+                <button onclick="window.location.href = 'login.php'" class="btn">Saioa hasi</button>
+            <?php } ?>
         </div>
     </div>
 </body>

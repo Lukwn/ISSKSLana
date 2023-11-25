@@ -31,8 +31,8 @@ $produktuak = $conn->query($sql);
 			<a href="index.php"><img class="logo" src="./source/bag.png" alt="Logo Alt Text"></a>
 			<nav class="nav_barra">
 				<ul>
-					<li class="li_barra"><a href="item_gehitu.php">Kamiseta gehitu</a></li>
 					<?php if (isset($_SESSION['ERAB'])) { ?>
+						<li class="li_barra"><a href="item_gehitu.php">Kamiseta gehitu</a></li>
 						<li class="li_barra"><a href="datuakaldatu.php">Datuak aldatu</a></li>
 						<li class="li_barra">
 							<form method="POST" class="logout_botoia">
@@ -51,7 +51,7 @@ $produktuak = $conn->query($sql);
 		<!-- Datu baseko produktuak taulako elementu guztiak iteratzen dira eta web orrialdearen html kodean gehitzen dira-->
 		<?php
 		while ($row = mysqli_fetch_assoc($produktuak)) {
-			?>
+		?>
 			<section class="productos">
 				<article class="producto">
 					<img src="<?php echo $row["img"] ?>" alt="">
@@ -72,7 +72,7 @@ $produktuak = $conn->query($sql);
 					</form>
 				</article>
 			</section>
-			<?php
+		<?php
 		}
 		?>
 	</section>

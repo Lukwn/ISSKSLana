@@ -30,9 +30,11 @@ if ($query) {
     $prezioa = $lerroa['prezioa'];
     $kolorea = $lerroa['kolorea'];
     $marka = $lerroa['marka'];
+    $erab = $lerroa['erab'];
 }
 
 if (isset($_POST['submit'])) {
+    if (isset($_SESSION['ERAB']) && $_SESSION['ERAB']['NAN']==$erab) {
     //js-a ez badu false bueltatzen hurrengo kodea egikaritzen da, non  insert-aren balioak atxitzen dira formulariotik
     $izena = $_POST['izena'];
     $neurria = $_POST['neurria'];
@@ -70,6 +72,10 @@ if (isset($_POST['submit'])) {
         echo '<script>alert("Error: ' . mysqli_error($conn) . '")</script>';
     }
 }
+else{
+    echo '<script>alert("Errore bat egon da.")</script>';
+}
+}
 
 
 ?>
@@ -92,26 +98,27 @@ if (isset($_POST['submit'])) {
         <div class="barra">
             <a href="index.php"><img class="logo" src="./source/bag.png" alt="Logo Alt Text"></a>
             <nav class="nav_barra">
-                <ul>
-                    <li class="li_barra"><a href="item_gehitu.php">Kamiseta gehitu</a></li>
-
-                    <?php if (isset($_SESSION['ERAB'])) { ?>
-                        <li class="li_barra"><a href="datuakaldatu.php">Datuak aldatu</a></li>
-                        <li class="li_barra">
-                            <form method="POST" class="logout_botoia">
-                                <button class="btn btn-danger" name="logout">Logout</button>
-                            </form>
-                        </li>
-                    <?php } else { ?>
-                        <li class="li_barra"><a href="login.php">Log in</a></li>
-                        <li class="li_barra"><a href="register.php">Register</a></li>
-                    <?php } ?>
-                </ul>
-            </nav>
+				<ul>
+					<?php if (isset($_SESSION['ERAB'])) { ?>
+						<li class="li_barra"><a href="item_gehitu.php">Kamiseta gehitu</a></li>
+						<li class="li_barra"><a href="datuakaldatu.php">Datuak aldatu</a></li>
+						<li class="li_barra">
+							<form method="POST" class="logout_botoia">
+								<button class="btn btn-danger" name="logout">Logout</button>
+							</form>
+						</li>
+					<?php } else { ?>
+						<li class="li_barra"><a href="login.php">Log in</a></li>
+						<li class="li_barra"><a href="register.php">Register</a></li>
+					<?php } ?>
+				</ul>
+			</nav>
         </div>
     </header>
     <div class="gorputza">
         <div class="wrapper">
+        <?php if (isset($_SESSION['ERAB'])) { ?>
+
             <form action="item_aldatu.php" class="formularioa" method="POST" enctype="multipart/form-data" onsubmit="return prezioZenbakia();">
                 <h1>
                     <?php echo $izena ?>
@@ -152,6 +159,10 @@ if (isset($_POST['submit'])) {
                 </div>
                 <button type="submit" class="btn" name="submit">Aldatu</button>
             </form>
+            <?php } else { ?>
+                <h1>Saioa hasi behar duzu kamisetaren datuak aldatzeko.</h1>
+                <button onclick="window.location.href = 'login.php'" class="btn">Saioa hasi</button>
+            <?php } ?>
         </div>
     </div>
 
