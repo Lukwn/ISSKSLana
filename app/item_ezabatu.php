@@ -1,6 +1,9 @@
 <?php
 session_start();
 include "konexioa.php";
+require_once "CSFR.php";
+
+
 if (isset($_SESSION['ERAB'])) {
     $id = $_POST['item_id'];
     $sql = "SELECT * FROM OBJEKTUA WHERE id = '$id'";

@@ -11,7 +11,7 @@ if (isset($_REQUEST['logout'])) {
         exit();
     }
     else{
-        header("Location: /index.php");
+        header("Location: /index.php"); 
     }
 }
 ?>

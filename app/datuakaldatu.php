@@ -3,6 +3,8 @@ session_start();
 
 include "konexioa.php";
 include "logout.php";
+require_once "CSFR.php";
+
 
 if (isset($_SESSION['ERAB'])) {
     $nan = $_SESSION['ERAB']['NAN'];
@@ -21,6 +23,8 @@ if (isset($_SESSION['ERAB'])) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $token = filter_input(INPUT_POST, 'token', FILTER_SANITIZE_STRING);
+	tokenEgiaztatu($token);
     //js-a ez badu false bueltatzen hurrengo kodea egikaritzen da, non  insert-aren balioak atxitzen dira formulariotik
     $izab = $_POST['izab'];
     $nan = $_POST['NAN'];
@@ -38,19 +42,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         //hash-a sortu
         $hashedpass = password_hash($passSalt, PASSWORD_DEFAULT);
+        $sql = "UPDATE `ERABILTZAILE` SET `Izen_Abizenak`=?, `NAN`=?, `Telefonoa`=?, `Jaiotze_data`=?, `email`=?, `pasahitza`=?, `salt`=? WHERE `NAN`=?";
+        $stmt = mysqli_prepare($conn, $sql);
+        if ($stmt === false) {
+            die("Errorea: " . mysqli_error($conn)); //Hau log-ean sartu beharko da.
+        }
+        mysqli_stmt_bind_param($stmt, "ssssssss", $izab, $nan, $tlf, $jd, $mail, $hashedpass, $salt, $_SESSION['ERAB']['NAN']);
     } else {
-        $hashedpass = $pass;
+        $sql = "UPDATE `ERABILTZAILE` SET `Izen_Abizenak`=?, `NAN`=?, `Telefonoa`=?, `Jaiotze_data`=?, `email`=? WHERE `NAN`=?";
+        $stmt = mysqli_prepare($conn, $sql);
+        if ($stmt === false) {
+            die("Errorea: " . mysqli_error($conn)); //Hau log-ean sartu beharko da.
+        }
+        mysqli_stmt_bind_param($stmt, "ssssss", $izab, $nan, $tlf, $jd, $mail, $_SESSION['ERAB']['NAN']);
+    
     }
 
     //update-aren eskaera idazten dugu
-    $sql = "UPDATE `ERABILTZAILE` SET `Izen_Abizenak`=?, `NAN`=?, `Telefonoa`=?, `Jaiotze_data`=?, `email`=?, `pasahitza`=?, `salt`=? WHERE `NAN`=?";
-    $stmt = mysqli_prepare($conn, $sql);
-    if ($stmt === false) {
-        die("Errorea: " . mysqli_error($conn)); //Hau log-ean sartu beharko da.
-    }
-    mysqli_stmt_bind_param($stmt, "ssssssss", $izab, $nan, $tlf, $jd, $mail, $hashedpass, $salt, $_SESSION['ERAB']['NAN']);
-
+   
     if (mysqli_stmt_execute($stmt)) {
+        $_SESSION['ERAB']['izena'] = $izab;
         $toLog = $_SESSION['ERAB']['NAN'] . " erabiltzailea bere datuak aldatu ditu";
         require_once 'logger.php';
         eventLogger($toLog);
@@ -103,7 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="gorputza">
         <div class="wrapper">
             <?php if (isset($_SESSION['ERAB'])) { ?>
-                <form action="datuakaldatu.php" class="formularioa" method="POST" onsubmit="return erregistroaBaieztatu();">
+                <form action="datuakaldatu.php" class="formularioa" method="POST" onsubmit="return datuakAldatuBaieztatu();">
                     <h1>Zure datuak aldatu,
                         <?php echo $_SESSION['ERAB']['izena']; ?>
                     </h1>
@@ -141,8 +152,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         Pasahitza (idatzi berri bat aurrekoa aldatzeko)
                     </div>
                     <div class="input-box">
-                        <input type="password" value="" name="pass" id="pass" required>
+                        <input type="password" value="" name="pass" id="pass">
                     </div>
+                    <input type="hidden" name="token" value="<?php echo $_SESSION['token'] ?? '' ?>">
                     <button type="submit" class="btn">Aldatu</button>
                 </form>
             <?php } else { ?>

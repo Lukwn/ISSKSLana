@@ -5,66 +5,105 @@ session_start();
 //mysqli-rekin konexioa ezarri
 include "./konexioa.php";
 include "./logout.php";
+require_once "CSFR.php";
 
 //Request-a egiten den momentuan egikaritzen da
 if (isset($_REQUEST['login'])) {
-	//nan eta pass aldagaiak lortzen ditugu.
-	$nan = $_REQUEST['NAN'];
-	$pass = $_REQUEST['pass'];
-	//sql kontsulta gordetze	n dugu aldagai batean eta gero egiten dugu mysqli_query() erabiliz
-	$sql = "SELECT * FROM ERABILTZAILE WHERE NAN = ?";
-	$stmt = mysqli_prepare($conn, $sql);
-	if ($stmt === false) {
-		die("Errorea: " . mysqli_error($conn)); //Hau log-ean sartu beharko da.
-	}
-	mysqli_stmt_bind_param($stmt, "s", $nan);
-	mysqli_stmt_execute($stmt);
-	$query = mysqli_stmt_get_result($stmt);
+	if (isset($_POST['g-recaptcha-response']) && !empty($_POST['g-recaptcha-response'])) {
+		$recaptcha_secret = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'; // Replace with your actual secret key
+		$recaptcha_response = $_POST['g-recaptcha-response'];
 
-	if ($query) {
-		//kontsultaren lerro emaitz kopurua kontatzen dira, 0 baino handiagoa bada erabiltzailea dagoela esan nahi du eta saioa hasiko da.
-		$num_lerro = mysqli_num_rows($query);
-		if ($num_lerro > 0) {
-			//kontsultaren lerroa zutabeen emaitzak gordetzen ditugu array batean, errezago atxitzeko
-			$lerroa = mysqli_fetch_assoc($query);
+		// Verify the reCAPTCHA response
+		$recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify';
+		$recaptcha_data = [
+			'secret' => $recaptcha_secret,
+			'response' => $recaptcha_response,
+		];
 
-			//salt gorde
-			$salt = $lerroa['salt'];
+		$options = [
+			'http' => [
+				'header' => 'Content-type: application/x-www-form-urlencoded',
+				'method' => 'POST',
+				'content' => http_build_query($recaptcha_data),
+			],
+		];
 
-			//pasahitza biderkatu salt-ekin
-			$passSalt = $pass . $salt;
+		$context = stream_context_create($options);
+		$recaptcha_result = file_get_contents($recaptcha_url, false, $context);
+		$recaptcha_result = json_decode($recaptcha_result, true);
 
-			//gordetako pasahitza gorde
-			$storedPasswordHash = $lerroa['pasahitza'];
-
-			//emaitza gordetako gakoarekin konparatu
-			if (password_verify($passSalt, $storedPasswordHash)) {
-				//saioa sortzen dugu
-				$_SESSION['ERAB'] = array();
-				$_SESSION['ERAB']['izena'] = $lerroa['Izen_Abizenak'];
-				$_SESSION['ERAB']['NAN'] = $lerroa['NAN'];
-
-				//Meter Log
-				$toLog = "Log in arrakastatsua - " . $lerroa['NAN'];
-				require_once 'logger.php';
-				eventLogger($toLog);
-
-				header("Location:./datuakaldatu.php");
-				exit();
-			} else {
-				echo '<script>alert("NAN-a edo pasahitza ez dira egokiak.")</script>';
-				$toLog = "Log in saiakera ez arrakastatsua - " . $lerroa['NAN'] . " . Erabilitako pasahitza: " . $pass;
-				require_once 'logger.php';
-				eventLogger($toLog);
+		if ($recaptcha_result['success']) {
+			// CAPTCHA verification successful, process the form data
+			// Add your form processing logic here
+			$token = filter_input(INPUT_POST, 'token', FILTER_SANITIZE_STRING);
+			tokenEgiaztatu($token);
+			//nan eta pass aldagaiak lortzen ditugu.
+			$nan = $_REQUEST['NAN'];
+			$pass = $_REQUEST['pass'];
+			//sql kontsulta gordetze	n dugu aldagai batean eta gero egiten dugu mysqli_query() erabiliz
+			$sql = "SELECT * FROM ERABILTZAILE WHERE NAN = ?";
+			$stmt = mysqli_prepare($conn, $sql);
+			if ($stmt === false) {
+				die("Errorea: " . mysqli_error($conn)); //Hau log-ean sartu beharko da.
 			}
+			mysqli_stmt_bind_param($stmt, "s", $nan);
+			mysqli_stmt_execute($stmt);
+			$query = mysqli_stmt_get_result($stmt);
+
+			if ($query) {
+				//kontsultaren lerro emaitz kopurua kontatzen dira, 0 baino handiagoa bada erabiltzailea dagoela esan nahi du eta saioa hasiko da.
+				$num_lerro = mysqli_num_rows($query);
+				if ($num_lerro > 0) {
+					//kontsultaren lerroa zutabeen emaitzak gordetzen ditugu array batean, errezago atxitzeko
+					$lerroa = mysqli_fetch_assoc($query);
+
+					//salt gorde
+					$salt = $lerroa['salt'];
+
+					//pasahitza biderkatu salt-ekin
+					$passSalt = $pass . $salt;
+
+					//gordetako pasahitza gorde
+					$storedPasswordHash = $lerroa['pasahitza'];
+
+					//emaitza gordetako gakoarekin konparatu
+					if (password_verify($passSalt, $storedPasswordHash)) {
+						//saioa sortzen dugu
+						$_SESSION['ERAB'] = array();
+						$_SESSION['ERAB']['izena'] = $lerroa['Izen_Abizenak'];
+						$_SESSION['ERAB']['NAN'] = $lerroa['NAN'];
+
+						//Meter Log
+						$toLog = "Log in arrakastatsua - " . $lerroa['NAN'];
+						require_once 'logger.php';
+						eventLogger($toLog);
+
+						header("Location:./datuakaldatu.php");
+						exit();
+					} else {
+						echo '<script>alert("NAN-a edo pasahitza ez dira egokiak.")</script>';
+						$toLog = "Log in saiakera ez arrakastatsua - " . $lerroa['NAN'] . " . Erabilitako pasahitza: " . $pass;
+						require_once 'logger.php';
+						eventLogger($toLog);
+					}
+				} else {
+					echo '<script>alert("NAN-a edo pasahitza ez dira egokiak.")</script>';
+					$toLog = "Log in saiakera ez arrakastatsua - " . $lerroa['NAN'] . " . Erabilitako pasahitza: " . $pass;
+					require_once 'logger.php';
+					eventLogger($toLog);
+				}
+			} else {
+				echo '<script>alert("Errore bat egon da.")</script>';
+			}
+			// Reset the CAPTCHA token
+			unset($_SESSION['token']);
 		} else {
-			echo '<script>alert("NAN-a edo pasahitza ez dira egokiak.")</script>';
-			$toLog = "Log in saiakera ez arrakastatsua - " . $lerroa['NAN'] . " . Erabilitako pasahitza: " . $pass;
-			require_once 'logger.php';
-			eventLogger($toLog);
+			// CAPTCHA verification failed, handle accordingly
+			$error_message = 'Errore bat egon da.';
 		}
 	} else {
-		echo '<script>alert("Errore bat egon da.")</script>';
+		// CAPTCHA was not completed, handle accordingly
+		$error_message = 'CAPTCHA bete behar duzu.';
 	}
 }
 ?>
@@ -79,6 +118,7 @@ if (isset($_REQUEST['login'])) {
 	<link rel="stylesheet" href="forms.css">
 	<link rel="stylesheet" href="./barra.css">
 	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+	<script src="https://www.google.com/recaptcha/api.js"></script>
 </head>
 
 <body>
@@ -116,7 +156,14 @@ if (isset($_REQUEST['login'])) {
 					<input type="password" placeholder="Pasahitza" name="pass" id="pass" required>
 					<i class='bx bx-lock-alt'></i>
 				</div>
+				<div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
+				<input type="hidden" name="token" value="<?php echo $_SESSION['token'] ?? '' ?>">
 				<button type="submit" name="login" class="btn">Login</button>
+				<?php
+				if (!empty($error_message)) {
+					echo '<div class="register-link">' . $error_message . '</div>';
+				}
+				?>
 				<div class="register-link">
 					<p>Ez zaude erregistratuta? <a href="./register.php">Register</a></p>
 				</div>

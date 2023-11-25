@@ -3,8 +3,11 @@ session_start();
 
 include "konexioa.php";
 include "logout.php";
+require_once "CSFR.php";
 
 if (isset($_POST['submit'])) {
+    $token = filter_input(INPUT_POST, 'token', FILTER_SANITIZE_STRING);
+	tokenEgiaztatu($token);
     $izena = $_POST['izena'];
     $neurria = $_POST['neurri'];
     $prezioa = $_POST['prezio'];
@@ -110,6 +113,7 @@ if (isset($_POST['submit'])) {
                     <div class="azalpen-test">
                         Argazkia aukeratu:
                     </div>
+                    <input type="hidden" name="token" value="<?php echo $_SESSION['token'] ?? '' ?>">
                     <div class="upload">
                         <input type="file" name="fitxategia" id="fitxategia">
                     </div>

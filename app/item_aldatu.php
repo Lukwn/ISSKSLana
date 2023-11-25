@@ -3,6 +3,8 @@ session_start();
 
 include "konexioa.php";
 include "logout.php";
+require_once "CSFR.php";
+
 
 //Sesioaren superglobalean sartzen ditugu id-a eta irudiaren izena geroago izateko
 if (!isset($_SESSION['img']) || !isset($_SESSION['id'])) {
@@ -34,6 +36,8 @@ if ($query) {
 }
 
 if (isset($_POST['submit'])) {
+    $token = filter_input(INPUT_POST, 'token', FILTER_SANITIZE_STRING);
+	tokenEgiaztatu($token);
     if (isset($_SESSION['ERAB']) && $_SESSION['ERAB']['NAN'] == $erab) {
         //js-a ez badu false bueltatzen hurrengo kodea egikaritzen da, non  insert-aren balioak atxitzen dira formulariotik
         $izena = $_POST['izena'];
@@ -156,6 +160,7 @@ if (isset($_POST['submit'])) {
                     <div class="input-box">
                         <input type="text" value="<?php echo $marka; ?>" name="marka" id="marka" required>
                     </div>
+                    <input type="hidden" name="token" value="<?php echo $_SESSION['token'] ?? '' ?>">
                     <div class="upload">
                         <input type="file" name="fitxategia" id="fitxategia">
                     </div>
