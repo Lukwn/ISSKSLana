@@ -1,8 +1,8 @@
 <?php
 //aldagaietan gordetzen ditugu konexioaren balioak
 $servername = "db";
-$username = "root";
-$password = "root";
+$username = "5YJBO8FCH1R2poV";
+$password = "HYLXpp1lrxI36o0";
 $dbname = "database";
 
 //konexioa saiatzen dugu

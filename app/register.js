@@ -28,8 +28,7 @@ function erregistroaBaieztatu() {
         return false;
     }
 
-    //jaiotze dataren formatua zuzena dela begiratzen da
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(document.getElementById('jd').value)) {
+    if (isNaN(Date.parse(document.getElementById('jd').value))) {
         alert("Dataren formatua ez da zuzena.");
         return false;
     }
@@ -39,6 +38,13 @@ function erregistroaBaieztatu() {
         alert("E-maila ez da zuzena.");
         return false;
     }
+
+    if (!/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(document.getElementById('pass').value)) {
+        alert("Pasahitza 8 karaktere, letra larri bat, letra xehe bat, zenbaki bat, eta karaktere ez alfanumeriko bat gutxienez izan behar ditu.");
+        return false;
+    }
+    
+
 }
 function prezioZenbakia(){
     if(isNaN(document.getElementById('prezio').value)){
