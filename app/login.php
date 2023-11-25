@@ -1,6 +1,7 @@
 <?php
 //Saioa hasi
 session_start();
+include "setHeader.php";
 
 //mysqli-rekin konexioa ezarri
 include "./konexioa.php";

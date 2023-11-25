@@ -1,5 +1,7 @@
 <?php
 //aldagaietan gordetzen ditugu konexioaren balioak
+include "setHeader.php";
+
 $servername = "db";
 $username = "5YJBO8FCH1R2poV";
 $password = "HYLXpp1lrxI36o0";

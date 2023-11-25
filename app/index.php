@@ -1,5 +1,7 @@
 <?php
+//Sesioa hasi edo 
 session_start();
+include "setHeader.php";
 
 include "konexioa.php";
 include "logout.php";
