@@ -28,30 +28,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $jd = $_POST['jd'];
     $mail = $_POST['mail'];
     $pass = $_POST['pass'];
-    
-    if($pass!=''){
-    	//gatza sortu “16 byte”
-        $salt=bin2hex(random_bytes(16));
-       	 
+
+    if ($pass != '') {
+        //gatza sortu “16 byte”
+        $salt = bin2hex(random_bytes(16));
+
         //pasahitza eta gatza batu
-        $passSalt=$pass.$salt;
-       	 
+        $passSalt = $pass . $salt;
+
         //hash-a sortu
-   	$hashedpass = password_hash($passSalt, PASSWORD_DEFAULT);
-    }
-    else{
-    	$hashedpass = $pass;
+        $hashedpass = password_hash($passSalt, PASSWORD_DEFAULT);
+    } else {
+        $hashedpass = $pass;
     }
 
     //update-aren eskaera idazten dugu
     $sql = "UPDATE `ERABILTZAILE` SET `Izen_Abizenak`=?, `NAN`=?, `Telefonoa`=?, `Jaiotze_data`=?, `email`=?, `pasahitza`=?, `salt`=? WHERE `NAN`=?";
     $stmt = mysqli_prepare($conn, $sql);
     if ($stmt === false) {
-		die("Errorea: " . mysqli_error($conn)); //Hau log-ean sartu beharko da.
-	}
+        die("Errorea: " . mysqli_error($conn)); //Hau log-ean sartu beharko da.
+    }
     mysqli_stmt_bind_param($stmt, "ssssssss", $izab, $nan, $tlf, $jd, $mail, $hashedpass, $salt, $_SESSION['ERAB']['NAN']);
 
     if (mysqli_stmt_execute($stmt)) {
+        $toLog = $_SESSION['ERAB']['NAN'] . " erabiltzailea bere datuak aldatu ditu";
+        require_once 'logger.php';
+        eventLogger($toLog);
         header("Location: /datuakaldatu.php");
     } else {
         echo '<script>alert("Error: ' . mysqli_error($conn) . '")</script>';
@@ -81,21 +83,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="barra">
             <a href="index.php"><img class="logo" src="./source/bag.png" alt="Logo Alt Text"></a>
             <nav class="nav_barra">
-				<ul>
-					<?php if (isset($_SESSION['ERAB'])) { ?>
-						<li class="li_barra"><a href="item_gehitu.php">Kamiseta gehitu</a></li>
-						<li class="li_barra"><a href="datuakaldatu.php">Datuak aldatu</a></li>
-						<li class="li_barra">
-							<form method="POST" class="logout_botoia">
-								<button class="btn btn-danger" name="logout">Logout</button>
-							</form>
-						</li>
-					<?php } else { ?>
-						<li class="li_barra"><a href="login.php">Log in</a></li>
-						<li class="li_barra"><a href="register.php">Register</a></li>
-					<?php } ?>
-				</ul>
-			</nav>
+                <ul>
+                    <?php if (isset($_SESSION['ERAB'])) { ?>
+                        <li class="li_barra"><a href="item_gehitu.php">Kamiseta gehitu</a></li>
+                        <li class="li_barra"><a href="datuakaldatu.php">Datuak aldatu</a></li>
+                        <li class="li_barra">
+                            <form method="POST" class="logout_botoia">
+                                <button class="btn btn-danger" name="logout">Logout</button>
+                            </form>
+                        </li>
+                    <?php } else { ?>
+                        <li class="li_barra"><a href="login.php">Log in</a></li>
+                        <li class="li_barra"><a href="register.php">Register</a></li>
+                    <?php } ?>
+                </ul>
+            </nav>
         </div>
     </header>
     <div class="gorputza">

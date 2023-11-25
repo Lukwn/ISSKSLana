@@ -16,6 +16,9 @@ if (isset($_SESSION['ERAB'])) {
             $sql = "DELETE FROM OBJEKTUA WHERE id='$id'";
             $produktuak = $conn->query($sql);
             $query = mysqli_query($conn, $sql);
+            $toLog = $_SESSION['ERAB']['NAN'] . " erabiltzailea " . $id . " kamiseta ezabatu du";
+            require_once 'logger.php';
+            eventLogger($toLog);
             header("Location:./index.php");
         } else {
             header("Location:./login.php");

@@ -1,4 +1,5 @@
 <?php
+session_start();
 include "konexioa.php";
 
 
@@ -46,6 +47,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         	// Eskaera egikaritzen da eta ez badago errorerik orrialde nagusira joaten gara
         	if (mysqli_stmt_execute($stmt)) {
             	// Erregistratu da
+				$toLog = "Erabiltzaile erregistratua - " . $nan;
+				require_once 'logger.php';
+				eventLogger($toLog);
             	echo '<script>alert("Erregistratu da")</script>';
 
         	} else {

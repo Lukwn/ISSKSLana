@@ -38,6 +38,9 @@ if (isset($_POST['submit'])) {
     mysqli_stmt_bind_param($stmt, "ssdssss", $izena, $neurria, $prezioa, $kolorea, $marka, $img, $nan);
 
     if (mysqli_stmt_execute($stmt)) {
+        $toLog = $nan . " erabiltzailea kamiseta bat igo du";
+        require_once 'logger.php';
+        eventLogger($toLog);
         echo '<script>alert("Kamiseta igo da.")</script>';
     } else {
         echo '<script>alert("Error: ' . mysqli_error($conn) . '")</script>';
