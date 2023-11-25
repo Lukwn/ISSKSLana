@@ -14,11 +14,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$sql = "SELECT * FROM ERABILTZAILE WHERE NAN = ?";
 	$stmt = mysqli_prepare($conn, $sql);
 	if ($stmt === false) {
-		die("Error in preparing the statement: " . mysqli_error($conn)); //Hau log-ean sartu beharko da.
+		die("Errorea: " . mysqli_error($conn)); //Hau log-ean sartu beharko da.
 	}
 	mysqli_stmt_bind_param($stmt, "s", $nan);
 	mysqli_stmt_execute($stmt);
-	$result = mysqli_stmt_get_result($stmt);
+	$query = mysqli_stmt_get_result($stmt);
 
 	if ($query) {
     	// kontsultaren lerro emaitz kopurua kontatzen dira, 0 baino handiagoa bada erabiltzailea jadanik datu basean dagoela esan nahi du eta erregisterra ez da egingo.
@@ -38,6 +38,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         	$sql = "INSERT INTO `ERABILTZAILE` (`Izen_Abizenak`, `NAN`, `Telefonoa`, `Jaiotze_data`, `email`, `pasahitza`, `salt`) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         	$stmt = mysqli_prepare($conn, $sql);
+			if ($stmt === false) {
+				die("Errorea: " . mysqli_error($conn)); //Hau log-ean sartu beharko da.
+			}
         	mysqli_stmt_bind_param($stmt, "sssssss", $izab, $nan, $tlf, $jd, $mail, $hashedPassword, $salt);
 
         	// Eskaera egikaritzen da eta ez badago errorerik orrialde nagusira joaten gara

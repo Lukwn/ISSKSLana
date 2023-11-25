@@ -11,9 +11,15 @@ if (isset($_REQUEST['login'])) {
 	//nan eta pass aldagaiak lortzen ditugu.
 	$nan = $_REQUEST['NAN'];
 	$pass = $_REQUEST['pass'];
-	//sql kontsulta gordetzen dugu aldagai batean eta gero egiten dugu mysqli_query() erabiliz
-	$sql = "SELECT * FROM ERABILTZAILE WHERE NAN = '$nan'";
-	$query = mysqli_query($conn, $sql);
+	//sql kontsulta gordetze	n dugu aldagai batean eta gero egiten dugu mysqli_query() erabiliz
+	$sql = "SELECT * FROM ERABILTZAILE WHERE NAN = ?";
+	$stmt = mysqli_prepare($conn, $sql);
+	if ($stmt === false) {
+		die("Errorea: " . mysqli_error($conn)); //Hau log-ean sartu beharko da.
+	}
+	mysqli_stmt_bind_param($stmt, "s", $nan);
+	mysqli_stmt_execute($stmt);
+	$query = mysqli_stmt_get_result($stmt);
 
 	if ($query) {
     	//kontsultaren lerro emaitz kopurua kontatzen dira, 0 baino handiagoa bada erabiltzailea dagoela esan nahi du eta saioa hasiko da.
@@ -38,14 +44,14 @@ if (isset($_REQUEST['login'])) {
             	$_SESSION['ERAB']['izena'] = $lerroa['Izen_Abizenak'];
             	$_SESSION['ERAB']['NAN'] = $lerroa['NAN'];
 
-				$archivoLog = 'actions.log';
+				/*$archivoLog = 'actions.log';
 				$ipAddress = $_SERVER['REMOTE_ADDR'];
 				$toLog = "Intento de log in from IP $ipAddress - " . $lerroa['NAN'] . " " . $pass;
 				$archivo = fopen($archivoLog, 'a');
 				$fechaHora = date('Y-m-d H:i:s');
 				$mensajeLog = "[$fechaHora] $toLog\n";  // Use $toLog instead of $mensaje
 				fwrite($archivo, $mensajeLog);
-				fclose($archivo);
+				fclose($archivo);*/
 
             	header("Location:./datuakaldatu.php");
             	exit();

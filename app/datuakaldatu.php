@@ -46,6 +46,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //update-aren eskaera idazten dugu
     $sql = "UPDATE `ERABILTZAILE` SET `Izen_Abizenak`=?, `NAN`=?, `Telefonoa`=?, `Jaiotze_data`=?, `email`=?, `pasahitza`=?, `salt`=? WHERE `NAN`=?";
     $stmt = mysqli_prepare($conn, $sql);
+    if ($stmt === false) {
+		die("Errorea: " . mysqli_error($conn)); //Hau log-ean sartu beharko da.
+	}
     mysqli_stmt_bind_param($stmt, "ssssssss", $izab, $nan, $tlf, $jd, $mail, $hashedpass, $salt, $_SESSION['ERAB']['NAN']);
 
     if (mysqli_stmt_execute($stmt)) {

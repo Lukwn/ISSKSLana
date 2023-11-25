@@ -58,9 +58,13 @@ if (isset($_POST['submit'])) {
         $img = "img/" . $_FILES["fitxategia"]["name"];
     }
     //update-aren eskaera idazten dugu
-    $sql = "UPDATE `OBJEKTUA` SET `izena`='$izena', `neurria`='$neurria', `prezioa`=$prezioa, `kolorea`='$kolorea', `marka`='$marka', `img`='$img' WHERE `id`=$id";
-    $query = mysqli_query($conn, $sql);
-    if ($query) {
+    $sql = "UPDATE `OBJEKTUA` SET `izena`=?, `neurria`=?, `prezioa`=?, `kolorea`=?, `marka`=?, `img`=? WHERE `id`=?";
+    $stmt = mysqli_prepare($conn, $sql);
+    if ($stmt === false) {
+		die("Errorea: " . mysqli_error($conn)); //Hau log-ean sartu beharko da.
+	}
+    mysqli_stmt_bind_param($stmt, "ssdssss", $izena, $neurria, $prezioa, $kolorea, $marka, $img, $id);
+    if (mysqli_stmt_execute($stmt)) {
         header("Location:./index.php");
     } else {
         echo '<script>alert("Error: ' . mysqli_error($conn) . '")</script>';
