@@ -1,6 +1,7 @@
 <?php
-session_start();
 include "setHeader.php";
+
+session_start();
 include "konexioa.php";
 require_once "CSFR.php";
 
@@ -44,7 +45,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			$sql = "SELECT * FROM ERABILTZAILE WHERE NAN = ?";
 			$stmt = mysqli_prepare($conn, $sql);
 			if ($stmt === false) {
-				die("Errorea: " . mysqli_error($conn)); //Hau log-ean sartu beharko da.
+				require_once 'logger.php';
+				errorLogger("Errorea: " . mysqli_error($conn));
+				die("Errore bat egon da."); //Hau log-ean sartu beharko da.
 			}
 			mysqli_stmt_bind_param($stmt, "s", $nan);
 			mysqli_stmt_execute($stmt);
@@ -69,7 +72,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 					$stmt = mysqli_prepare($conn, $sql);
 					if ($stmt === false) {
-						die("Errorea: " . mysqli_error($conn)); //Hau log-ean sartu beharko da.
+						require_once 'logger.php';
+						errorLogger("Errorea: " . mysqli_error($conn));
+						die("Errore bat egon da");
 					}
 					mysqli_stmt_bind_param($stmt, "sssssss", $izab, $nan, $tlf, $jd, $mail, $hashedPassword, $salt);
 
@@ -81,7 +86,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 						eventLogger($toLog);
 						echo '<script>alert("Erregistratu da")</script>';
 					} else {
-						echo '<script>alert("Error: ' . mysqli_error($conn) . '")</script>';
+						require_once 'logger.php';
+						errorLogger("Errorea: " . mysqli_error($conn));
+						echo '<script>alert("Errore bat egon da")</script>';
 					}
 
 					mysqli_close($conn);
@@ -94,10 +101,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		} else {
 			// CAPTCHA verification failed, handle accordingly
 			$error_message = 'Errore bat egon da.';
+			require_once 'logger.php';
+			errorLogger("Captcha failed");
 		}
 	} else {
 		// CAPTCHA was not completed, handle accordingly
 		$error_message = 'CAPTCHA bete behar duzu.';
+		+require_once 'logger.php';
+		errorLogger("Captcha ez da bete");
 	}
 }
 
@@ -107,7 +118,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="eu">
 
 <head>
-	<meta charset="UTF-8">
+	<meta http-equiv="Content-Security-Policy" charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Register</title>
 	<link rel="stylesheet" href="forms.css">

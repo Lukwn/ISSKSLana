@@ -6,9 +6,10 @@
 ```
 $ docker build -t="web" .
 ```
-2. img direktorioaren baimenak aldatu argazkiak igotzeko
+2. img eta logs direktorioen baimenak aldatu apachek idatzi ahal izateko, horrela logak eta irudiak erabili ahalko ditugu
 ```
-$ sudo chmod 777 app/img
+$ sudo chmod -R 777 app/img
+$ sudo chmod -R 777 app/logs
 ```
 3. Zerbitzuen edukiontziak hasi detached moduan
 ```

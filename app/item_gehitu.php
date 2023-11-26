@@ -1,14 +1,14 @@
 <?php
+include "setHeader.php";
 session_start();
 
-include "setHeader.php";
 include "konexioa.php";
 include "logout.php";
 require_once "CSFR.php";
 
 if (isset($_POST['submit'])) {
     $anticsrf = filter_input(INPUT_POST, 'anticsrf', FILTER_SANITIZE_STRING);
-	tokenEgiaztatu($anticsrf);
+    tokenEgiaztatu($anticsrf);
     $izena = $_POST['izena'];
     $neurria = $_POST['neurri'];
     $prezioa = $_POST['prezio'];
@@ -37,7 +37,9 @@ if (isset($_POST['submit'])) {
     $sql = "INSERT INTO `OBJEKTUA` (`izena`, `neurria`, `prezioa`, `kolorea`, `marka`, `img`, `erab`) VALUES (?, ?, ?, ?, ?, ?,?)";
     $stmt = mysqli_prepare($conn, $sql);
     if ($stmt === false) {
-        die("Errorea: " . mysqli_error($conn)); //Hau log-ean sartu beharko da.
+        require_once 'logger.php';
+        errorLogger("Errorea: " . mysqli_error($conn));
+        die("Errore bat egon da");
     }
     mysqli_stmt_bind_param($stmt, "ssdssss", $izena, $neurria, $prezioa, $kolorea, $marka, $img, $nan);
 
@@ -47,7 +49,9 @@ if (isset($_POST['submit'])) {
         eventLogger($toLog);
         echo '<script>alert("Kamiseta igo da.")</script>';
     } else {
-        echo '<script>alert("Error: ' . mysqli_error($conn) . '")</script>';
+        require_once 'logger.php';
+        errorLogger("Error: ' . mysqli_error($conn) . '");
+        echo '<script>alert(Errore bat egon da.)</script>';
     }
 
     //datu basearekin konexioa ixten dugu
@@ -59,7 +63,7 @@ if (isset($_POST['submit'])) {
 <html lang="eu">
 
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kamiseta igo</title>
     <link rel="stylesheet" href="forms.css">

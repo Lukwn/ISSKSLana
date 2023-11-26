@@ -1,6 +1,7 @@
 <?php
-session_start();
 include "setHeader.php";
+
+session_start();
 
 include "konexioa.php";
 include "logout.php";
@@ -38,7 +39,7 @@ if ($query) {
 
 if (isset($_POST['submit'])) {
     $anticsrf = filter_input(INPUT_POST, 'anticsrf', FILTER_SANITIZE_STRING);
-	tokenEgiaztatu($anticsrf);
+    tokenEgiaztatu($anticsrf);
     if (isset($_SESSION['ERAB']) && $_SESSION['ERAB']['NAN'] == $erab) {
         //js-a ez badu false bueltatzen hurrengo kodea egikaritzen da, non  insert-aren balioak atxitzen dira formulariotik
         $izena = $_POST['izena'];
@@ -60,7 +61,9 @@ if (isset($_POST['submit'])) {
                     }
                 }
             } else {
-                echo "File upload error: " . $_FILES['fitxategia']['error'];
+                require_once 'logger.php';
+                errorLogger("File upload error: " . $_FILES['fitxategia']['error']);
+                echo '<script>alert(Errore bat egon da.)</script>';
             }
             $img = "img/" . $_FILES["fitxategia"]["name"];
         }
@@ -68,7 +71,9 @@ if (isset($_POST['submit'])) {
         $sql = "UPDATE `OBJEKTUA` SET `izena`=?, `neurria`=?, `prezioa`=?, `kolorea`=?, `marka`=?, `img`=? WHERE `id`=?";
         $stmt = mysqli_prepare($conn, $sql);
         if ($stmt === false) {
-            die("Errorea: " . mysqli_error($conn)); //Hau log-ean sartu beharko da.
+            require_once 'logger.php';
+            eventLogger("Errorea: " . mysqli_error($conn));
+            die("Errore bat egon da."); //Hau log-ean sartu beharko da.
         }
         mysqli_stmt_bind_param($stmt, "ssdssss", $izena, $neurria, $prezioa, $kolorea, $marka, $img, $id);
         if (mysqli_stmt_execute($stmt)) {
@@ -77,7 +82,9 @@ if (isset($_POST['submit'])) {
             eventLogger($toLog);
             header("Location:./index.php");
         } else {
-            echo '<script>alert("Error: ' . mysqli_error($conn) . '")</script>';
+            require_once 'logger.php';
+            errorLogger("Error: ' . mysqli_error($conn) . '");
+            echo '<script>alert(Errore bat egon da.)</script>';
         }
     } else {
         echo '<script>alert("Errore bat egon da.")</script>';
@@ -90,7 +97,7 @@ if (isset($_POST['submit'])) {
 <html lang="eu">
 
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zure datuak</title>
     <link rel="stylesheet" href="datuakaldatu.css">
@@ -123,9 +130,9 @@ if (isset($_POST['submit'])) {
     </header>
     <div class="gorputza">
         <div class="wrapper">
-            <?php if (isset($_SESSION['ERAB'])) { 
+            <?php if (isset($_SESSION['ERAB'])) {
                 $anticsrf = filter_input(INPUT_POST, 'anticsrf', FILTER_SANITIZE_STRING);
-                tokenEgiaztatu($anticsrf);?>
+                tokenEgiaztatu($anticsrf); ?>
 
                 <form action="item_aldatu.php" class="formularioa" method="POST" enctype="multipart/form-data" onsubmit="return prezioZenbakia();">
                     <h1>

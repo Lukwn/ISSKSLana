@@ -1,6 +1,7 @@
 <?php
-session_start();
 include "setHeader.php";
+
+session_start();
 
 include "konexioa.php";
 require_once "CSFR.php";

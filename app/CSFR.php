@@ -1,5 +1,4 @@
 <?php
-include "setHeader.php";
 if (!isset($_SESSION['anticsrf'])) {
     $_SESSION['anticsrf'] = bin2hex(random_bytes(35));
 }

@@ -1,7 +1,8 @@
 <?php
+include "setHeader.php";
+
 //Sesioa hasi edo 
 session_start();
-include "setHeader.php";
 
 include "konexioa.php";
 include "logout.php";
@@ -21,7 +22,7 @@ $produktuak = $conn->query($sql);
 <html lang="es">
 
 <head>
-	<meta charset="UTF-8">
+	<meta http-equiv="Content-Security-Policy" charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Levin - Kamisetak</title>
 	<link rel="stylesheet" href="lista.css">

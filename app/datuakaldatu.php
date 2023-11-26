@@ -1,6 +1,7 @@
 <?php
-session_start();
 include "setHeader.php";
+
+session_start();
 include "konexioa.php";
 include "logout.php";
 require_once "CSFR.php";
@@ -24,7 +25,7 @@ if (isset($_SESSION['ERAB'])) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $anticsrf = filter_input(INPUT_POST, 'anticsrf', FILTER_SANITIZE_STRING);
-	tokenEgiaztatu($token);
+    tokenEgiaztatu($anticsrf);
     //js-a ez badu false bueltatzen hurrengo kodea egikaritzen da, non  insert-aren balioak atxitzen dira formulariotik
     $izab = $_POST['izab'];
     $nan = $_POST['NAN'];
@@ -55,11 +56,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             die("Errorea: " . mysqli_error($conn)); //Hau log-ean sartu beharko da.
         }
         mysqli_stmt_bind_param($stmt, "ssssss", $izab, $nan, $tlf, $jd, $mail, $_SESSION['ERAB']['NAN']);
-    
     }
 
     //update-aren eskaera idazten dugu
-   
+
     if (mysqli_stmt_execute($stmt)) {
         $_SESSION['ERAB']['izena'] = $izab;
         $toLog = $_SESSION['ERAB']['NAN'] . " erabiltzailea bere datuak aldatu ditu";
@@ -67,7 +67,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         eventLogger($toLog);
         header("Location: /datuakaldatu.php");
     } else {
-        echo '<script>alert("Error: ' . mysqli_error($conn) . '")</script>';
+        require_once 'logger.php';
+        errorLogger("Error: ' . mysqli_error($conn) . '");
+        echo '<script>alert(Errore bat egon da.)</script>';
     }
 
     //datu basearekin konexioa ixten dugu
@@ -80,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="eu">
 
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zure datuak</title>
     <link rel="stylesheet" href="datuakaldatu.css">

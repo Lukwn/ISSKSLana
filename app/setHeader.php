@@ -1,3 +1,8 @@
 <?php
-//header("Content-Security-Policy: default-src 'self'; connect-src 'self'; font-src 'self' https://fonts.googleapis.com; script-src 'self' https://www.google.com/recaptcha/api.js https://fonts.googleapis.com;");
-header("X-Frame-Options: DENY");
+header_remove("X-Powered-By");  
+header_remove("Server");
+header('X-Frame-Options: SAMEORIGIN');
+header('X-XSS-Protection: 0');
+header('X-Content-Type-Options: nosniff');
+
+ini_set("session.cookie_httponly", True);

@@ -1,7 +1,8 @@
 <?php
+include "setHeader.php";
+
 //Saioa hasi
 session_start();
-include "setHeader.php";
 
 //mysqli-rekin konexioa ezarri
 include "./konexioa.php";
@@ -45,7 +46,9 @@ if (isset($_REQUEST['login'])) {
 			$sql = "SELECT * FROM ERABILTZAILE WHERE NAN = ?";
 			$stmt = mysqli_prepare($conn, $sql);
 			if ($stmt === false) {
-				die("Errorea: " . mysqli_error($conn)); //Hau log-ean sartu beharko da.
+				require_once 'logger.php';
+				errorLogger("Errorea: " . mysqli_error($conn));
+				die("Errore bat egon da");
 			}
 			mysqli_stmt_bind_param($stmt, "s", $nan);
 			mysqli_stmt_execute($stmt);
@@ -99,12 +102,16 @@ if (isset($_REQUEST['login'])) {
 			// Reset the CAPTCHA token
 			unset($_SESSION['token']);
 		} else {
-			// CAPTCHA verification failed, handle accordingly
+			// CAPTCHA huts egin du
 			$error_message = 'Errore bat egon da.';
+			+require_once 'logger.php';
+			errorLogger("Captcha failed");
 		}
 	} else {
-		// CAPTCHA was not completed, handle accordingly
+		// CAPTCHA ez da bete
 		$error_message = 'CAPTCHA bete behar duzu.';
+		+require_once 'logger.php';
+		errorLogger("Captcha ez da bete");
 	}
 }
 ?>
@@ -113,7 +120,7 @@ if (isset($_REQUEST['login'])) {
 <html lang="eu">
 
 <head>
-	<meta charset="UTF-8">
+	<meta http-equiv="Content-Security-Policy" charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Login</title>
 	<link rel="stylesheet" href="forms.css">
