@@ -9,6 +9,18 @@ include "./konexioa.php";
 include "./logout.php";
 require_once "CSFR.php";
 
+$ip = $_SERVER['REMOTE_ADDR'];
+
+if (!isset($_SESSION['saiakeraKop'])) {
+	$_SESSION['saiakeraKop'] = 0;
+}
+
+if (isIPBanned($ip)) {
+	// IP baneatuta badago, index.php-ra buetatuko gara
+	header("Location: ./index.php");
+	exit();
+} 
+
 //Request-a egiten den momentuan egikaritzen da
 if (isset($_REQUEST['login'])) {
 	if (isset($_POST['g-recaptcha-response']) && !empty($_POST['g-recaptcha-response'])) {
@@ -35,13 +47,15 @@ if (isset($_REQUEST['login'])) {
 		$recaptcha_result = json_decode($recaptcha_result, true);
 
 		if ($recaptcha_result['success']) {
-			// CAPTCHA verification successful, process the form data
-			// Add your form processing logic here
+			//CAPTCHA baieztatu da
 			$anticsrf = filter_input(INPUT_POST, 'anticsrf', FILTER_SANITIZE_STRING);
 			tokenEgiaztatu($anticsrf);
+
 			//nan eta pass aldagaiak lortzen ditugu.
 			$nan = $_REQUEST['NAN'];
 			$pass = $_REQUEST['pass'];
+			$ip = $_SERVER['REMOTE_ADDR'];
+
 			//sql kontsulta gordetze	n dugu aldagai batean eta gero egiten dugu mysqli_query() erabiliz
 			$sql = "SELECT * FROM ERABILTZAILE WHERE NAN = ?";
 			$stmt = mysqli_prepare($conn, $sql);
@@ -76,6 +90,7 @@ if (isset($_REQUEST['login'])) {
 						$_SESSION['ERAB'] = array();
 						$_SESSION['ERAB']['izena'] = $lerroa['Izen_Abizenak'];
 						$_SESSION['ERAB']['NAN'] = $lerroa['NAN'];
+						$_SESSION['saiakeraKop'] = 0;
 
 						//Meter Log
 						$toLog = "Log in arrakastatsua - " . $lerroa['NAN'];
@@ -99,8 +114,27 @@ if (isset($_REQUEST['login'])) {
 			} else {
 				echo '<script>alert("Errore bat egon da.")</script>';
 			}
-			// Reset the CAPTCHA token
+			//CAPTCHA token-a berrabiarazi
 			unset($_SESSION['token']);
+
+			$_SESSION['saiakeraKop']++; // Login saiakerak handitu
+
+			if ($_SESSION['saiakeraKop'] >= 5) {
+				//Saiakera gehiegi egon direnez, azken saiakera honetan saiakera asko egon direla esango digu eta index.php-ra bueltatuko gaitu
+				//PHP-k ez du uzten header metodoaren aurretik echo bat egiten beraz JavaScript erabiliz egingo dugu
+				echo '<script>';
+				echo 'setTimeout(function(){';
+				echo '  alert("Saiakera gehiegi: ' . $_SESSION['saiakeraKop'] . '");';
+				echo '  window.location.href = "./index.php";';
+				echo '}, 1000);'; // segundu bat itxaron
+				echo '</script>';
+				//$_SESSION['saiakeraKop'] = 0;
+
+
+				//Gure ip-ak saiakera gehiegi izan dituela kontuan hartuko du eta gure ip-a baneatuta dauden ip-lista batera gehituko ditu
+				banIP($ip);
+				exit();
+			}
 		} else {
 			// CAPTCHA huts egin du
 			$error_message = 'Errore bat egon da.';
@@ -113,6 +147,33 @@ if (isset($_REQUEST['login'])) {
 		+require_once 'logger.php';
 		errorLogger("Captcha ez da bete");
 	}
+}
+function banIP($ip)
+{
+    //Sartu den ip-a gorde baneatuen ip-listan
+    $file = 'logs/banned_IP.txt';
+    $data = "$ip|" . time() . "\n";
+    file_put_contents($file, $data, FILE_APPEND);
+}
+
+function isIPBanned($ip)
+{
+    $file = 'logs/banned_IP.txt';
+    $bannedIPs = file($file, FILE_IGNORE_NEW_LINES);
+    foreach ($bannedIPs as $line) {
+        list($bannedIP, $timestamp) = explode('|', $line);
+        if ($bannedIP === $ip) {
+            // Begiratu ip-baneo denbora igaro den (2 min)
+            $banDuration = 2 * 60; // 2 minutu segundutan
+            if (time() - $timestamp < $banDuration) {
+                return true; // ip baneatuta dago oraindik
+            }
+			else{
+				$_SESSION['saiakeraKop'] = 0;
+			}
+        }
+    }
+    return false; // ip ez dago baneatuta
 }
 ?>
 
