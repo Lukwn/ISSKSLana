@@ -11,3 +11,4 @@
 [2023-11-26 16:13:11] 172.20.0.1 Captcha ez da bete
 [2023-11-26 16:15:17] 172.20.0.1 Captcha ez da bete
 [2023-11-26 16:15:43] 172.20.0.1 Captcha ez da bete
+[2023-11-26 16:36:29] 172.25.0.1 Errorea: Incorrect integer value: 'ZAP' for column `database`.`ERABILTZAILE`.`Telefonoa` at row 1

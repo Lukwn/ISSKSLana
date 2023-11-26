@@ -8,107 +8,69 @@ require_once "CSFR.php";
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	if (isset($_POST['g-recaptcha-response']) && !empty($_POST['g-recaptcha-response'])) {
-		$recaptcha_secret = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'; // Replace with your actual secret key
-		$recaptcha_response = $_POST['g-recaptcha-response'];
+	// Kode hau bakarrik egikaritzen da register.js script-a ez badu false bueltatzen
+	$anticsrf = filter_input(INPUT_POST, 'anticsrf', FILTER_SANITIZE_STRING);
+	tokenEgiaztatu($anticsrf);
+	$izab = $_POST['izab'];
+	$nan = $_POST['NAN'];
+	$tlf = $_POST['tlf'];
+	$jd = $_POST['jd'];
+	$mail = $_POST['mail'];
+	$pass = $_POST['pass'];
 
-		// Verify the reCAPTCHA response
-		$recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify';
-		$recaptcha_data = [
-			'secret' => $recaptcha_secret,
-			'response' => $recaptcha_response,
-		];
+	$sql = "SELECT * FROM ERABILTZAILE WHERE NAN = ?";
+	$stmt = mysqli_prepare($conn, $sql);
+	if ($stmt === false) {
+		require_once 'logger.php';
+		errorLogger("Errorea: " . mysqli_error($conn));
+		die("Errore bat egon da."); //Hau log-ean sartu beharko da.
+	}
+	mysqli_stmt_bind_param($stmt, "s", $nan);
+	mysqli_stmt_execute($stmt);
+	$query = mysqli_stmt_get_result($stmt);
 
-		$options = [
-			'http' => [
-				'header' => 'Content-type: application/x-www-form-urlencoded',
-				'method' => 'POST',
-				'content' => http_build_query($recaptcha_data),
-			],
-		];
+	if ($query) {
+		// kontsultaren lerro emaitz kopurua kontatzen dira, 0 baino handiagoa bada erabiltzailea jadanik datu basean dagoela esan nahi du eta erregisterra ez da egingo.
+		$num_lerro = mysqli_num_rows($query);
+		if ($num_lerro == 0) {
 
-		$context = stream_context_create($options);
-		$recaptcha_result = file_get_contents($recaptcha_url, false, $context);
-		$recaptcha_result = json_decode($recaptcha_result, true);
+			//gatza sortu “16 byte”
+			$salt = bin2hex(random_bytes(16));
 
-		if ($recaptcha_result['success']) {
-			// Kode hau bakarrik egikaritzen da register.js script-a ez badu false bueltatzen
-			$anticsrf = filter_input(INPUT_POST, 'anticsrf', FILTER_SANITIZE_STRING);
-			tokenEgiaztatu($anticsrf);
-			$izab = $_POST['izab'];
-			$nan = $_POST['NAN'];
-			$tlf = $_POST['tlf'];
-			$jd = $_POST['jd'];
-			$mail = $_POST['mail'];
-			$pass = $_POST['pass'];
+			//pasahitza eta gatza batu
+			$passSalt = $pass . $salt;
 
-			$sql = "SELECT * FROM ERABILTZAILE WHERE NAN = ?";
+			//hash-a sortu
+			$hashedPassword = password_hash($passSalt, PASSWORD_DEFAULT);
+
+			// Datu basearen eskaera prestatzen dugu
+			$sql = "INSERT INTO `ERABILTZAILE` (`Izen_Abizenak`, `NAN`, `Telefonoa`, `Jaiotze_data`, `email`, `pasahitza`, `salt`) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
 			$stmt = mysqli_prepare($conn, $sql);
 			if ($stmt === false) {
 				require_once 'logger.php';
 				errorLogger("Errorea: " . mysqli_error($conn));
-				die("Errore bat egon da."); //Hau log-ean sartu beharko da.
+				die("Errore bat egon da");
 			}
-			mysqli_stmt_bind_param($stmt, "s", $nan);
-			mysqli_stmt_execute($stmt);
-			$query = mysqli_stmt_get_result($stmt);
+			mysqli_stmt_bind_param($stmt, "sssssss", $izab, $nan, $tlf, $jd, $mail, $hashedPassword, $salt);
 
-			if ($query) {
-				// kontsultaren lerro emaitz kopurua kontatzen dira, 0 baino handiagoa bada erabiltzailea jadanik datu basean dagoela esan nahi du eta erregisterra ez da egingo.
-				$num_lerro = mysqli_num_rows($query);
-				if ($num_lerro == 0) {
-
-					//gatza sortu “16 byte”
-					$salt = bin2hex(random_bytes(16));
-
-					//pasahitza eta gatza batu
-					$passSalt = $pass . $salt;
-
-					//hash-a sortu
-					$hashedPassword = password_hash($passSalt, PASSWORD_DEFAULT);
-
-					// Datu basearen eskaera prestatzen dugu
-					$sql = "INSERT INTO `ERABILTZAILE` (`Izen_Abizenak`, `NAN`, `Telefonoa`, `Jaiotze_data`, `email`, `pasahitza`, `salt`) VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-					$stmt = mysqli_prepare($conn, $sql);
-					if ($stmt === false) {
-						require_once 'logger.php';
-						errorLogger("Errorea: " . mysqli_error($conn));
-						die("Errore bat egon da");
-					}
-					mysqli_stmt_bind_param($stmt, "sssssss", $izab, $nan, $tlf, $jd, $mail, $hashedPassword, $salt);
-
-					// Eskaera egikaritzen da eta ez badago errorerik orrialde nagusira joaten gara
-					if (mysqli_stmt_execute($stmt)) {
-						// Erregistratu da
-						$toLog = "Erabiltzaile erregistratua - " . $nan;
-						require_once 'logger.php';
-						eventLogger($toLog);
-						echo '<script>alert("Erregistratu da")</script>';
-					} else {
-						require_once 'logger.php';
-						errorLogger("Errorea: " . mysqli_error($conn));
-						echo '<script>alert("Errore bat egon da")</script>';
-					}
-
-					mysqli_close($conn);
-				} else {
-					echo '<script>alert("NAN hori duen erabiltzailea badago")</script>';
-				}
+			// Eskaera egikaritzen da eta ez badago errorerik orrialde nagusira joaten gara
+			if (mysqli_stmt_execute($stmt)) {
+				// Erregistratu da
+				$toLog = "Erabiltzaile erregistratua - " . $nan;
+				require_once 'logger.php';
+				eventLogger($toLog);
+				echo '<script>alert("Erregistratu da")</script>';
+			} else {
+				require_once 'logger.php';
+				errorLogger("Errorea: " . mysqli_error($conn));
+				echo '<script>alert("Errore bat egon da")</script>';
 			}
-			// Reset the CAPTCHA token
-			unset($_SESSION['token']);
+
+			mysqli_close($conn);
 		} else {
-			// CAPTCHA verification failed, handle accordingly
-			$error_message = 'Errore bat egon da.';
-			require_once 'logger.php';
-			errorLogger("Captcha failed");
+			echo '<script>alert("NAN hori duen erabiltzailea badago")</script>';
 		}
-	} else {
-		// CAPTCHA was not completed, handle accordingly
-		$error_message = 'CAPTCHA bete behar duzu.';
-		+require_once 'logger.php';
-		errorLogger("Captcha ez da bete");
 	}
 }
 
@@ -124,7 +86,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	<link rel="stylesheet" href="forms.css">
 	<link rel="stylesheet" href="./barra.css">
 	<script src="./register.js"></script>
-	<script src="https://www.google.com/recaptcha/api.js"></script>
 </head>
 
 <body>
@@ -173,7 +134,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 					<input type="password" placeholder="Pasahitza" name="pass" id="pass" required>
 				</div>
 				<input type="hidden" name="anticsrf" value="<?php echo $_SESSION['anticsrf'] ?? '' ?>">
-				<div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
 				<button type="submit" class="btn">Erregistratu</button>
 				<?php
 				if (!empty($error_message)) {

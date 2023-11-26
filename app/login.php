@@ -19,161 +19,121 @@ if (isIPBanned($ip)) {
 	// IP baneatuta badago, index.php-ra buetatuko gara
 	header("Location: ./index.php");
 	exit();
-} 
+}
 
 //Request-a egiten den momentuan egikaritzen da
 if (isset($_REQUEST['login'])) {
-	if (isset($_POST['g-recaptcha-response']) && !empty($_POST['g-recaptcha-response'])) {
-		$recaptcha_secret = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'; // Replace with your actual secret key
-		$recaptcha_response = $_POST['g-recaptcha-response'];
+	$anticsrf = filter_input(INPUT_POST, 'anticsrf', FILTER_SANITIZE_STRING);
+	tokenEgiaztatu($anticsrf);
 
-		// Verify the reCAPTCHA response
-		$recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify';
-		$recaptcha_data = [
-			'secret' => $recaptcha_secret,
-			'response' => $recaptcha_response,
-		];
+	//nan eta pass aldagaiak lortzen ditugu.
+	$nan = $_REQUEST['NAN'];
+	$pass = $_REQUEST['pass'];
+	$ip = $_SERVER['REMOTE_ADDR'];
 
-		$options = [
-			'http' => [
-				'header' => 'Content-type: application/x-www-form-urlencoded',
-				'method' => 'POST',
-				'content' => http_build_query($recaptcha_data),
-			],
-		];
+	//sql kontsulta gordetze	n dugu aldagai batean eta gero egiten dugu mysqli_query() erabiliz
+	$sql = "SELECT * FROM ERABILTZAILE WHERE NAN = ?";
+	$stmt = mysqli_prepare($conn, $sql);
+	if ($stmt === false) {
+		require_once 'logger.php';
+		errorLogger("Errorea: " . mysqli_error($conn));
+		die("Errore bat egon da");
+	}
+	mysqli_stmt_bind_param($stmt, "s", $nan);
+	mysqli_stmt_execute($stmt);
+	$query = mysqli_stmt_get_result($stmt);
 
-		$context = stream_context_create($options);
-		$recaptcha_result = file_get_contents($recaptcha_url, false, $context);
-		$recaptcha_result = json_decode($recaptcha_result, true);
+	if ($query) {
+		//kontsultaren lerro emaitz kopurua kontatzen dira, 0 baino handiagoa bada erabiltzailea dagoela esan nahi du eta saioa hasiko da.
+		$num_lerro = mysqli_num_rows($query);
+		if ($num_lerro > 0) {
+			//kontsultaren lerroa zutabeen emaitzak gordetzen ditugu array batean, errezago atxitzeko
+			$lerroa = mysqli_fetch_assoc($query);
 
-		if ($recaptcha_result['success']) {
-			//CAPTCHA baieztatu da
-			$anticsrf = filter_input(INPUT_POST, 'anticsrf', FILTER_SANITIZE_STRING);
-			tokenEgiaztatu($anticsrf);
+			//salt gorde
+			$salt = $lerroa['salt'];
 
-			//nan eta pass aldagaiak lortzen ditugu.
-			$nan = $_REQUEST['NAN'];
-			$pass = $_REQUEST['pass'];
-			$ip = $_SERVER['REMOTE_ADDR'];
+			//pasahitza biderkatu salt-ekin
+			$passSalt = $pass . $salt;
 
-			//sql kontsulta gordetze	n dugu aldagai batean eta gero egiten dugu mysqli_query() erabiliz
-			$sql = "SELECT * FROM ERABILTZAILE WHERE NAN = ?";
-			$stmt = mysqli_prepare($conn, $sql);
-			if ($stmt === false) {
+			//gordetako pasahitza gorde
+			$storedPasswordHash = $lerroa['pasahitza'];
+
+			//emaitza gordetako gakoarekin konparatu
+			if (password_verify($passSalt, $storedPasswordHash)) {
+				//saioa sortzen dugu
+				$_SESSION['ERAB'] = array();
+				$_SESSION['ERAB']['izena'] = $lerroa['Izen_Abizenak'];
+				$_SESSION['ERAB']['NAN'] = $lerroa['NAN'];
+				$_SESSION['saiakeraKop'] = 0;
+
+				//Meter Log
+				$toLog = "Log in arrakastatsua - " . $lerroa['NAN'];
 				require_once 'logger.php';
-				errorLogger("Errorea: " . mysqli_error($conn));
-				die("Errore bat egon da");
-			}
-			mysqli_stmt_bind_param($stmt, "s", $nan);
-			mysqli_stmt_execute($stmt);
-			$query = mysqli_stmt_get_result($stmt);
+				eventLogger($toLog);
 
-			if ($query) {
-				//kontsultaren lerro emaitz kopurua kontatzen dira, 0 baino handiagoa bada erabiltzailea dagoela esan nahi du eta saioa hasiko da.
-				$num_lerro = mysqli_num_rows($query);
-				if ($num_lerro > 0) {
-					//kontsultaren lerroa zutabeen emaitzak gordetzen ditugu array batean, errezago atxitzeko
-					$lerroa = mysqli_fetch_assoc($query);
-
-					//salt gorde
-					$salt = $lerroa['salt'];
-
-					//pasahitza biderkatu salt-ekin
-					$passSalt = $pass . $salt;
-
-					//gordetako pasahitza gorde
-					$storedPasswordHash = $lerroa['pasahitza'];
-
-					//emaitza gordetako gakoarekin konparatu
-					if (password_verify($passSalt, $storedPasswordHash)) {
-						//saioa sortzen dugu
-						$_SESSION['ERAB'] = array();
-						$_SESSION['ERAB']['izena'] = $lerroa['Izen_Abizenak'];
-						$_SESSION['ERAB']['NAN'] = $lerroa['NAN'];
-						$_SESSION['saiakeraKop'] = 0;
-
-						//Meter Log
-						$toLog = "Log in arrakastatsua - " . $lerroa['NAN'];
-						require_once 'logger.php';
-						eventLogger($toLog);
-
-						header("Location:./datuakaldatu.php");
-						exit();
-					} else {
-						echo '<script>alert("NAN-a edo pasahitza ez dira egokiak.")</script>';
-						$toLog = "Log in saiakera ez arrakastatsua - " . $lerroa['NAN'] . " . Erabilitako pasahitza: " . $pass;
-						require_once 'logger.php';
-						eventLogger($toLog);
-					}
-				} else {
-					echo '<script>alert("NAN-a edo pasahitza ez dira egokiak.")</script>';
-					$toLog = "Log in saiakera ez arrakastatsua - " . $lerroa['NAN'] . " . Erabilitako pasahitza: " . $pass;
-					require_once 'logger.php';
-					eventLogger($toLog);
-				}
-			} else {
-				echo '<script>alert("Errore bat egon da.")</script>';
-			}
-			//CAPTCHA token-a berrabiarazi
-			unset($_SESSION['token']);
-
-			$_SESSION['saiakeraKop']++; // Login saiakerak handitu
-
-			if ($_SESSION['saiakeraKop'] >= 5) {
-				//Saiakera gehiegi egon direnez, azken saiakera honetan saiakera asko egon direla esango digu eta index.php-ra bueltatuko gaitu
-				//PHP-k ez du uzten header metodoaren aurretik echo bat egiten beraz JavaScript erabiliz egingo dugu
-				echo '<script>';
-				echo 'setTimeout(function(){';
-				echo '  alert("Saiakera gehiegi: ' . $_SESSION['saiakeraKop'] . '");';
-				echo '  window.location.href = "./index.php";';
-				echo '}, 1000);'; // segundu bat itxaron
-				echo '</script>';
-				//$_SESSION['saiakeraKop'] = 0;
-
-
-				//Gure ip-ak saiakera gehiegi izan dituela kontuan hartuko du eta gure ip-a baneatuta dauden ip-lista batera gehituko ditu
-				banIP($ip);
+				header("Location:./datuakaldatu.php");
 				exit();
+			} else {
+				echo '<script>alert("NAN-a edo pasahitza ez dira egokiak.")</script>';
+				$toLog = "Log in saiakera ez arrakastatsua - " . $lerroa['NAN'] . " . Erabilitako pasahitza: " . $pass;
+				require_once 'logger.php';
+				eventLogger($toLog);
 			}
 		} else {
-			// CAPTCHA huts egin du
-			$error_message = 'Errore bat egon da.';
-			+require_once 'logger.php';
-			errorLogger("Captcha failed");
+			echo '<script>alert("NAN-a edo pasahitza ez dira egokiak.")</script>';
+			$toLog = "Log in saiakera ez arrakastatsua - " . $lerroa['NAN'] . " . Erabilitako pasahitza: " . $pass;
+			require_once 'logger.php';
+			eventLogger($toLog);
 		}
 	} else {
-		// CAPTCHA ez da bete
-		$error_message = 'CAPTCHA bete behar duzu.';
-		+require_once 'logger.php';
-		errorLogger("Captcha ez da bete");
+		echo '<script>alert("Errore bat egon da.")</script>';
+	}
+
+	$_SESSION['saiakeraKop']++; // Login saiakerak handitu
+
+	if ($_SESSION['saiakeraKop'] >= 5) {
+		//Saiakera gehiegi egon direnez, azken saiakera honetan saiakera asko egon direla esango digu eta index.php-ra bueltatuko gaitu
+		//PHP-k ez du uzten header metodoaren aurretik echo bat egiten beraz JavaScript erabiliz egingo dugu
+		echo '<script>';
+		echo 'setTimeout(function(){';
+		echo '  alert("Saiakera gehiegi: ' . $_SESSION['saiakeraKop'] . '");';
+		echo '  window.location.href = "./index.php";';
+		echo '}, 1000);'; // segundu bat itxaron
+		echo '</script>';
+		//$_SESSION['saiakeraKop'] = 0;
+
+
+		//Gure ip-ak saiakera gehiegi izan dituela kontuan hartuko du eta gure ip-a baneatuta dauden ip-lista batera gehituko ditu
+		banIP($ip);
+		exit();
 	}
 }
 function banIP($ip)
 {
-    //Sartu den ip-a gorde baneatuen ip-listan
-    $file = 'logs/banned_IP.txt';
-    $data = "$ip|" . time() . "\n";
-    file_put_contents($file, $data, FILE_APPEND);
+	//Sartu den ip-a gorde baneatuen ip-listan
+	$file = 'logs/banned_IP.txt';
+	$data = "$ip|" . time() . "\n";
+	file_put_contents($file, $data, FILE_APPEND);
 }
 
 function isIPBanned($ip)
 {
-    $file = 'logs/banned_IP.txt';
-    $bannedIPs = file($file, FILE_IGNORE_NEW_LINES);
-    foreach ($bannedIPs as $line) {
-        list($bannedIP, $timestamp) = explode('|', $line);
-        if ($bannedIP === $ip) {
-            // Begiratu ip-baneo denbora igaro den (2 min)
-            $banDuration = 2 * 60; // 2 minutu segundutan
-            if (time() - $timestamp < $banDuration) {
-                return true; // ip baneatuta dago oraindik
-            }
-			else{
+	$file = 'logs/banned_IP.txt';
+	$bannedIPs = file($file, FILE_IGNORE_NEW_LINES);
+	foreach ($bannedIPs as $line) {
+		list($bannedIP, $timestamp) = explode('|', $line);
+		if ($bannedIP === $ip) {
+			// Begiratu ip-baneo denbora igaro den (2 min)
+			$banDuration = 2 * 60; // 2 minutu segundutan
+			if (time() - $timestamp < $banDuration) {
+				return true; // ip baneatuta dago oraindik
+			} else {
 				$_SESSION['saiakeraKop'] = 0;
 			}
-        }
-    }
-    return false; // ip ez dago baneatuta
+		}
+	}
+	return false; // ip ez dago baneatuta
 }
 ?>
 
@@ -186,7 +146,6 @@ function isIPBanned($ip)
 	<title>Login</title>
 	<link rel="stylesheet" href="forms.css">
 	<link rel="stylesheet" href="./barra.css">
-	<script src="https://www.google.com/recaptcha/api.js"></script>
 </head>
 
 <body>
@@ -222,7 +181,6 @@ function isIPBanned($ip)
 				<div class="input-box">
 					<input type="password" placeholder="Pasahitza" name="pass" id="pass" required>
 				</div>
-				<div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
 				<input type="hidden" name="anticsrf" value="<?php echo $_SESSION['anticsrf'] ?? '' ?>">
 				<button type="submit" name="login" class="btn">Login</button>
 				<?php
