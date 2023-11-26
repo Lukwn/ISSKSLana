@@ -17,7 +17,8 @@ $ docker-compose up -d
 ```
 4. Datu basearen dump-a inportatu
 ```
-http://localhost:8890/ direkzioan 5YJBO8FCH1R2poV erabiltzailea eta HYLXpp1lrxI36o0 pasahitza erabiliz "importar" atalean db.sql fitxategia igo
+http://localhost:8890/ direkzioan 5YJBO8FCH1R2poV erabiltzailea eta HYLXpp1lrxI36o0 pasahitza erabiliz "importar"
+atalean db.sql fitxategia igo
 ```
 5. Web sisteman sartu
 ```
