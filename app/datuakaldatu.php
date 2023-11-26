@@ -23,7 +23,7 @@ if (isset($_SESSION['ERAB'])) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $token = filter_input(INPUT_POST, 'token', FILTER_SANITIZE_STRING);
+    $anticsrf = filter_input(INPUT_POST, 'anticsrf', FILTER_SANITIZE_STRING);
 	tokenEgiaztatu($token);
     //js-a ez badu false bueltatzen hurrengo kodea egikaritzen da, non  insert-aren balioak atxitzen dira formulariotik
     $izab = $_POST['izab'];
@@ -85,7 +85,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Zure datuak</title>
     <link rel="stylesheet" href="datuakaldatu.css">
     <link rel="stylesheet" href="./barra.css">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="./register.js"></script>
 </head>
 
@@ -154,7 +153,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="input-box">
                         <input type="password" value="" name="pass" id="pass">
                     </div>
-                    <input type="hidden" name="token" value="<?php echo $_SESSION['token'] ?? '' ?>">
+                    <input type="hidden" name="anticsrf" value="<?php echo $_SESSION['anticsrf'] ?? '' ?>">
                     <button type="submit" class="btn">Aldatu</button>
                 </form>
             <?php } else { ?>

@@ -38,9 +38,9 @@ $produktuak = $conn->query($sql);
 						<li class="li_barra"><a href="item_gehitu.php">Kamiseta gehitu</a></li>
 						<li class="li_barra"><a href="datuakaldatu.php">Datuak aldatu</a></li>
 						<li class="li_barra">
-						<form method="POST" class="logout_botoia">
-                                <button class="btn btn-danger" name="logout">Logout</button>
-                            </form>
+							<form method="POST" class="logout_botoia">
+								<button class="btn btn-danger" name="logout">Logout</button>
+							</form>
 						</li>
 					<?php } else { ?>
 						<li class="li_barra"><a href="login.php">Log in</a></li>
@@ -65,10 +65,14 @@ $produktuak = $conn->query($sql);
 						<?php echo $row["prezioa"] ?> €
 					</p>
 					<form action="item_aldatu.php" method="post">
+						<input type="hidden" name="item_id" value="<?php echo $row["id"]; ?>">
+						<input type="hidden" name="anticsrf" value="<?php echo $_SESSION['anticsrf'] ?? '' ?>">
 						<button type="submit">Datuak aldatu</button>
 					</form>
 
 					<form action="item_ezabatu.php" method="post">
+						<input type="hidden" name="item_id" value="<?php echo $row["id"]; ?>">
+						<input type="hidden" name="anticsrf" value="<?php echo $_SESSION['anticsrf'] ?? '' ?>">
 						<button type="submit">Ezabatu</button>
 					</form>
 				</article>

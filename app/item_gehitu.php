@@ -7,8 +7,8 @@ include "logout.php";
 require_once "CSFR.php";
 
 if (isset($_POST['submit'])) {
-    $token = filter_input(INPUT_POST, 'token', FILTER_SANITIZE_STRING);
-	tokenEgiaztatu($token);
+    $anticsrf = filter_input(INPUT_POST, 'anticsrf', FILTER_SANITIZE_STRING);
+	tokenEgiaztatu($anticsrf);
     $izena = $_POST['izena'];
     $neurria = $_POST['neurri'];
     $prezioa = $_POST['prezio'];
@@ -64,7 +64,6 @@ if (isset($_POST['submit'])) {
     <title>Kamiseta igo</title>
     <link rel="stylesheet" href="forms.css">
     <link rel="stylesheet" href="./barra.css">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="./register.js"></script>
 </head>
 
@@ -114,7 +113,7 @@ if (isset($_POST['submit'])) {
                     <div class="azalpen-test">
                         Argazkia aukeratu:
                     </div>
-                    <input type="hidden" name="token" value="<?php echo $_SESSION['token'] ?? '' ?>">
+                    <input type="hidden" name="anticsrf" value="<?php echo $_SESSION['anticsrf'] ?? '' ?>">
                     <div class="upload">
                         <input type="file" name="fitxategia" id="fitxategia">
                     </div>

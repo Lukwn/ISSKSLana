@@ -7,6 +7,8 @@ require_once "CSFR.php";
 
 
 if (isset($_SESSION['ERAB'])) {
+    $anticsrf = filter_input(INPUT_POST, 'anticsrf', FILTER_SANITIZE_STRING);
+    tokenEgiaztatu($anticsrf);
     $id = $_POST['item_id'];
     $sql = "SELECT * FROM OBJEKTUA WHERE id = '$id'";
     $query = mysqli_query($conn, $sql);

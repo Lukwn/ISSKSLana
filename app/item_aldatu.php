@@ -37,8 +37,8 @@ if ($query) {
 }
 
 if (isset($_POST['submit'])) {
-    $token = filter_input(INPUT_POST, 'token', FILTER_SANITIZE_STRING);
-	tokenEgiaztatu($token);
+    $anticsrf = filter_input(INPUT_POST, 'anticsrf', FILTER_SANITIZE_STRING);
+	tokenEgiaztatu($anticsrf);
     if (isset($_SESSION['ERAB']) && $_SESSION['ERAB']['NAN'] == $erab) {
         //js-a ez badu false bueltatzen hurrengo kodea egikaritzen da, non  insert-aren balioak atxitzen dira formulariotik
         $izena = $_POST['izena'];
@@ -95,7 +95,6 @@ if (isset($_POST['submit'])) {
     <title>Zure datuak</title>
     <link rel="stylesheet" href="datuakaldatu.css">
     <link rel="stylesheet" href="./barra.css">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="./register.js"></script>
 
 </head>
@@ -124,7 +123,9 @@ if (isset($_POST['submit'])) {
     </header>
     <div class="gorputza">
         <div class="wrapper">
-            <?php if (isset($_SESSION['ERAB'])) { ?>
+            <?php if (isset($_SESSION['ERAB'])) { 
+                $anticsrf = filter_input(INPUT_POST, 'anticsrf', FILTER_SANITIZE_STRING);
+                tokenEgiaztatu($anticsrf);?>
 
                 <form action="item_aldatu.php" class="formularioa" method="POST" enctype="multipart/form-data" onsubmit="return prezioZenbakia();">
                     <h1>
@@ -161,7 +162,7 @@ if (isset($_POST['submit'])) {
                     <div class="input-box">
                         <input type="text" value="<?php echo $marka; ?>" name="marka" id="marka" required>
                     </div>
-                    <input type="hidden" name="token" value="<?php echo $_SESSION['token'] ?? '' ?>">
+                    <input type="hidden" name="anticsrf" value="<?php echo $_SESSION['anticsrf'] ?? '' ?>">
                     <div class="upload">
                         <input type="file" name="fitxategia" id="fitxategia">
                     </div>

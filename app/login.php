@@ -36,8 +36,8 @@ if (isset($_REQUEST['login'])) {
 		if ($recaptcha_result['success']) {
 			// CAPTCHA verification successful, process the form data
 			// Add your form processing logic here
-			$token = filter_input(INPUT_POST, 'token', FILTER_SANITIZE_STRING);
-			tokenEgiaztatu($token);
+			$anticsrf = filter_input(INPUT_POST, 'anticsrf', FILTER_SANITIZE_STRING);
+			tokenEgiaztatu($anticsrf);
 			//nan eta pass aldagaiak lortzen ditugu.
 			$nan = $_REQUEST['NAN'];
 			$pass = $_REQUEST['pass'];
@@ -118,7 +118,6 @@ if (isset($_REQUEST['login'])) {
 	<title>Login</title>
 	<link rel="stylesheet" href="forms.css">
 	<link rel="stylesheet" href="./barra.css">
-	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 	<script src="https://www.google.com/recaptcha/api.js"></script>
 </head>
 
@@ -151,14 +150,12 @@ if (isset($_REQUEST['login'])) {
 				<h1>Login</h1>
 				<div class="input-box">
 					<input type="text" placeholder="Erabiltzailea(NAN)" name="NAN" id="NAN" required>
-					<i class='bx bx-user-circle'></i>
 				</div>
 				<div class="input-box">
 					<input type="password" placeholder="Pasahitza" name="pass" id="pass" required>
-					<i class='bx bx-lock-alt'></i>
 				</div>
 				<div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
-				<input type="hidden" name="token" value="<?php echo $_SESSION['token'] ?? '' ?>">
+				<input type="hidden" name="anticsrf" value="<?php echo $_SESSION['anticsrf'] ?? '' ?>">
 				<button type="submit" name="login" class="btn">Login</button>
 				<?php
 				if (!empty($error_message)) {

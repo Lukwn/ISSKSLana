@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: db
--- Tiempo de generación: 22-10-2023 a las 18:41:12
+-- Tiempo de generación: 26-11-2023 a las 10:58:04
 -- Versión del servidor: 10.8.2-MariaDB-1:10.8.2+maria~focal
 -- Versión de PHP: 8.2.8
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `database`
 --
+CREATE DATABASE IF NOT EXISTS `database` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `database`;
 
 -- --------------------------------------------------------
 
@@ -42,7 +44,7 @@ CREATE TABLE `ERABILTZAILE` (
 --
 
 INSERT INTO `ERABILTZAILE` (`Izen_Abizenak`, `NAN`, `Telefonoa`, `Jaiotze_data`, `email`, `pasahitza`, `salt`) VALUES
-('Luken Escobero', '46374748D', 123456789, '2003-04-21', 'lol@mail.com', '$2y$10$zebi0z7i5eCAmfVY8h8Z0.Njul7IH6yz5NsXpLM35um6IOwgdwvsa', 'd1b65f4963452be3a3aad1ae54d877a4');
+('Luken ', '46374748D', 123456789, '2003-04-21', 'lol@mail.com', '$2y$10$zebi0z7i5eCAmfVY8h8Z0.Njul7IH6yz5NsXpLM35um6IOwgdwvsa', 'd1b65f4963452be3a3aad1ae54d877a4');
 
 -- --------------------------------------------------------
 
@@ -57,21 +59,19 @@ CREATE TABLE `OBJEKTUA` (
   `prezioa` decimal(10,0) NOT NULL,
   `kolorea` varchar(100) NOT NULL,
   `marka` varchar(100) NOT NULL,
-  `img` varchar(255) NOT NULL
+  `img` varchar(255) NOT NULL,
+  `erab` char(9) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `OBJEKTUA`
 --
 
-INSERT INTO `OBJEKTUA` (`id`, `izena`, `neurria`, `prezioa`, `kolorea`, `marka`, `img`) VALUES
-(11, 'Marroi', 'L', 20, 'Marroia', 'Zara', 'img/kamiseta3.jpg'),
-(15, 'Beltza', 'S', 18, 'Beltza', 'Burshke', 'img/kamiseta2.jpg'),
-(16, 'Zuria', 'XXL', 100, 'Zuria', 'Pull', 'img/kamiseta1.jpg'),
-(19, 'Grisa', 'XXXL', 100, 'Gris', 'Zaru', 'img/kamiseta4.jpg'),
-(20, 'Kamiseta', 'XS', 30, 'Urdina', 'Generikoa', 'img/camiseta.jpeg'),
-(23, 'Kamiseta', 'XXS', 17, 'Grisa', 'Zarza', 'img/kamiseta4.jpg'),
-(24, 'Patroia', 'XXL', 100, 'ASKO', 'Muyigual', 'img/gptr,1265x,front,black-c,330,402,600,600-bg,f8f8f8.jpg');
+INSERT INTO `OBJEKTUA` (`id`, `izena`, `neurria`, `prezioa`, `kolorea`, `marka`, `img`, `erab`) VALUES
+(11, 'Marroi Marroi', 'L', 20, 'Marroia', 'Zara', 'img/kamiseta3.jpg', '46374748D'),
+(15, 'Beltza', 'S', 18, 'Beltza', 'Burshke', 'img/kamiseta2.jpg', '46374748D'),
+(16, 'Zuria', 'XXL', 100, 'Zuria', 'Pull', 'img/kamiseta1.jpg', '46374748D'),
+(19, 'Grisa', 'XXXL', 100, 'Gris', 'Zaru', 'img/kamiseta4.jpg', '46374748D');
 
 --
 -- Índices para tablas volcadas
@@ -103,4 +103,3 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-

@@ -32,8 +32,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 		if ($recaptcha_result['success']) {
 			// Kode hau bakarrik egikaritzen da register.js script-a ez badu false bueltatzen
-			$token = filter_input(INPUT_POST, 'token', FILTER_SANITIZE_STRING);
-			tokenEgiaztatu($token);
+			$anticsrf = filter_input(INPUT_POST, 'anticsrf', FILTER_SANITIZE_STRING);
+			tokenEgiaztatu($anticsrf);
 			$izab = $_POST['izab'];
 			$nan = $_POST['NAN'];
 			$tlf = $_POST['tlf'];
@@ -112,7 +112,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	<title>Register</title>
 	<link rel="stylesheet" href="forms.css">
 	<link rel="stylesheet" href="./barra.css">
-	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 	<script src="./register.js"></script>
 	<script src="https://www.google.com/recaptcha/api.js"></script>
 </head>
@@ -162,7 +161,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 				<div class="input-box">
 					<input type="password" placeholder="Pasahitza" name="pass" id="pass" required>
 				</div>
-				<input type="hidden" name="token" value="<?php echo $_SESSION['token'] ?? '' ?>">
+				<input type="hidden" name="anticsrf" value="<?php echo $_SESSION['anticsrf'] ?? '' ?>">
 				<div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
 				<button type="submit" class="btn">Erregistratu</button>
 				<?php
