@@ -117,24 +117,36 @@ function banIP($ip)
 	file_put_contents($file, $data, FILE_APPEND);
 }
 
-function isIPBanned($ip)
-{
-	$file = 'logs/banned_IP.txt';
-	$bannedIPs = file($file, FILE_IGNORE_NEW_LINES);
-	foreach ($bannedIPs as $line) {
-		list($bannedIP, $timestamp) = explode('|', $line);
-		if ($bannedIP === $ip) {
+function isIPBanned($ip) {
+	// begiratu banned_IP.txt artxiboan dagoena
+	$bannedIPs = file('logs/banned_IP.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+ 
+ 
+	$isBanned = false;
+ 
+ 
+	foreach ($bannedIPs as $key => $bannedIP) {
+		// Banatu IP-a eta ordua
+		list($bannedIP, $timestamp) = explode('|', $bannedIP);
+ 
+ 
+		// Conprobatu ea konprobatu nahi den ip-a eta baneatuta dagoen ip-a berdinak diren
+		if ($ip === $bannedIP) {
 			// Begiratu ip-baneo denbora igaro den (2 min)
-			$banDuration = 2 * 60; // 2 minutu segundutan
-			if (time() - $timestamp < $banDuration) {
-				return true; // ip baneatuta dago oraindik
+			if ((time() - $timestamp) < 2*60) {
+				$isBanned = true; // ip baneatuta dago
 			} else {
+				// baneoa amaitu da, ezabatu artxibotik
 				$_SESSION['saiakeraKop'] = 0;
+				unset($bannedIPs[$key]);
 			}
 		}
 	}
-	return false; // ip ez dago baneatuta
-}
+	// eguneratu banned_IP.txt
+	file_put_contents('logs/banned_IP.txt', implode("\n", $bannedIPs));
+	return $isBanned;
+ }
+ 
 ?>
 
 <!DOCTYPE html>

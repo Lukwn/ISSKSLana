@@ -39,6 +39,7 @@ function erregistroaBaieztatu() {
         return false;
     }
 
+    //pasahitzaren baieztatu
     if (!/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(document.getElementById('pass').value)) {
         alert("Pasahitza 8 karaktere, letra larri bat, letra xehe bat, zenbaki bat, eta karaktere ez alfanumeriko bat gutxienez izan behar ditu.");
         return false;
@@ -92,7 +93,7 @@ function datuakAldatuBaieztatu() {
         if (!document.getElementById('pass').value.trim() == '') {
             alert("Pasahitza 8 karaktere, letra larri bat, letra xehe bat, zenbaki bat, eta karaktere ez alfanumeriko bat gutxienez izan behar ditu.");
             return false;
-        }XMLDocument
+        }
     }
 
 
